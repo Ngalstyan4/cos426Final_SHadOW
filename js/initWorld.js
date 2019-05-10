@@ -81,11 +81,9 @@ function initWorld() {
     // hover highlight plane
     let cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions
     var geometry = new THREE.PlaneGeometry( cellSideLen, cellSideLen, 32 );
-    geometry = new THREE.BoxGeometry( cellSideLen, cellSideLen, cellSideLen );
-
-    var material = new THREE.MeshBasicMaterial( {color: 0xaaaaaa, side: THREE.DoubleSide} );
+    var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
     plane = new THREE.Mesh( geometry, material );
-    plane.position.set(cellSideLen/2, cellSideLen/2, cellSideLen/2);
+    plane.position.set(cellSideLen/2, 0, cellSideLen/2);
     plane.rotation.x = Math.PI / 2;
     plane.castShadow = true;
     plane.receiveShadow = true;
@@ -93,7 +91,7 @@ function initWorld() {
 
     // Add a transparent plane on the floor to easily do raycasting
     var geometry = new THREE.PlaneGeometry( CONFIG.PLAYGROUND.size, CONFIG.PLAYGROUND.size, 32 );
-    var material = new THREE.MeshBasicMaterial( {color: 0x00ffff, side: THREE.DoubleSide} );
+    var material = new THREE.MeshBasicMaterial( {color: 0x00ffff, side: THREE.DoubleSide, opacity:0} );
     material.transparent = true;
     wholePlane = new THREE.Mesh( geometry, material );
     wholePlane.position.set(0,0,0);
