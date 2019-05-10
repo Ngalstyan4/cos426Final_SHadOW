@@ -34,10 +34,43 @@ function render() {
         var intersects = raycaster.intersectObjects( intersectArray );
         if ( intersects.length > 0 ) {
             let {x,y,z} = intersects[0].point;
-            x = Math.sign(x) * (Math.abs(x) - Math.abs(x) % cellSideLen+cellSideLen/2);
-            y = (Math.abs(y) - Math.abs(y) % cellSideLen+cellSideLen/2);
-            z = Math.sign(z) * (Math.abs(z) - Math.abs(z) % cellSideLen+cellSideLen/2);
-            
+
+            if (intersects[0].object !== wholePlane){
+                var normal = intersects[0].face.normal.normalize();        
+                if (normal.equals(new THREE.Vector3(0,1,0)) || normal.equals(new THREE.Vector3(0,-1,0))){                
+                    x =  Math.sign(x) * (Math.abs(x) - Math.abs(x) % cellSideLen+cellSideLen/2);
+                    z =  Math.sign(z) * (Math.abs(z) - Math.abs(z) % cellSideLen+cellSideLen/2);
+
+                    if (normal.equals(new THREE.Vector3(0,1,0)))
+                        y = y + cellSideLen/2;
+                    else
+                        y = y - cellSideLen/2;
+                }
+                else if (normal.equals(new THREE.Vector3(1,0,0)) || normal.equals(new THREE.Vector3(-1,0,0))){
+                    y =  Math.sign(y) * (Math.abs(y) - Math.abs(y) % cellSideLen +cellSideLen/2);
+                    z =  Math.sign(z) * (Math.abs(z) - Math.abs(z) % cellSideLen+cellSideLen/2);
+
+                    if (normal.equals(new THREE.Vector3(1,0,0)))
+                        x = x + cellSideLen/2;
+                    else
+                        x = x - cellSideLen/2;
+                }
+                else if (normal.equals(new THREE.Vector3(0,0,1)) || normal.equals(new THREE.Vector3(0,0,-1))){
+                    x =  Math.sign(x) * (Math.abs(x) - Math.abs(x) % cellSideLen+cellSideLen/2);
+                    y =  Math.sign(y) * (Math.abs(y) - Math.abs(y) % cellSideLen + cellSideLen/2);
+
+                    if (normal.equals(new THREE.Vector3(0,0,1)))
+                        z = z + cellSideLen/2;
+                    else
+                        z = z - cellSideLen/2;
+                }
+            }
+            else{
+                x =  Math.sign(x) * (Math.abs(x) - Math.abs(x) % cellSideLen+cellSideLen/2);
+                y = y + cellSideLen/2;
+                z =  Math.sign(z) * (Math.abs(z) - Math.abs(z) % cellSideLen+cellSideLen/2);
+            }
+                        
             var geometry = new THREE.BoxGeometry( cellSideLen, cellSideLen, cellSideLen );
             var material = new THREE.MeshBasicMaterial( {color: 0x4286f4} );
             var cube = new THREE.Mesh( geometry, material );
