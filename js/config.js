@@ -3,7 +3,7 @@ var CONFIG =
 {
     DEBUG: true,
     PLAYGROUND: {
-        size: 1000,
-        divisions: 8
+        size: 1024,
+        divisions: 16
     }
 }

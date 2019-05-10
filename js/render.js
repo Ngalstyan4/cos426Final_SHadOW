@@ -29,9 +29,9 @@ function render() {
     var intersects = raycaster.intersectObjects( [wholePlane] );
     if ( intersects.length > 0 ) {
         let {x,z} = intersects[0].point;
-
-        plane.position.x =  Math.sign(x) * (Math.abs(x) - Math.abs(x) % 125+125/2);
-        plane.position.z =  Math.sign(z) * (Math.abs(z) - Math.abs(z) % 125+125/2);
+        let cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions;
+        plane.position.x =  Math.sign(x) * (Math.abs(x) - Math.abs(x) % cellSideLen+cellSideLen/2);
+        plane.position.z =  Math.sign(z) * (Math.abs(z) - Math.abs(z) % cellSideLen+cellSideLen/2);
     }
     /* Render mouse hover effects END */
 
