@@ -72,7 +72,7 @@ function render() {
             }
                         
             var geometry = new THREE.BoxGeometry( cellSideLen, cellSideLen, cellSideLen );
-            var material = new THREE.MeshBasicMaterial( {color: 0x4286f4} );
+            var material = new THREE.MeshNormalMaterial( {color: 0x4286f4} );
             var cube = new THREE.Mesh( geometry, material );
             scene.add( cube );
 
