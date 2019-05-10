@@ -2,6 +2,10 @@
 var CONFIG =
 {
     DEBUG: true,
+    HELPER_STRUCTS: {
+        wall1camera:false,
+        wall2camera:false
+    },
     PLAYGROUND: {
         size: 1024,
         divisions: 16,

@@ -169,12 +169,16 @@ function initWorld() {
     wall2Light.position.set( 0, 0, CONFIG.PLAYGROUND.size); 			//default; light shining from top
     scene.add( wall1Light );
 
-    // if (CONFIG.DEBUG) {
-    //     let wall1CameraHelper = new THREE.CameraHelper( wall1Light.shadow.camera );
-    //     let wall2CameraHelper = new THREE.CameraHelper( wall2Light.shadow.camera );
-    //     scene.add(wall1CameraHelper);
-    //     scene.add(wall2CameraHelper);
-    // }
+    if (CONFIG.HELPER_STRUCTS.wall1camera) {
+        let wall1CameraHelper = new THREE.CameraHelper( wall1Light.shadow.camera );
+        scene.add(wall1CameraHelper);
+    }
+
+    if (CONFIG.HELPER_STRUCTS.wall2camera) {
+        let wall2CameraHelper = new THREE.CameraHelper( wall2Light.shadow.camera );
+        scene.add(wall2CameraHelper);
+    }
+    
     // Add lights towards the walls END
 
 
