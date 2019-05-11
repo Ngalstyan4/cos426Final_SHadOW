@@ -23,7 +23,8 @@ function initGui() {
         .listen();
         let cameraControls = gui.addFolder("Camera");
 
-        cameraControls.add(guiControls.camera, "x").step(0.001).name("Camera X").listen();
+        cameraControls.add(guiControls.camera, "x").step(0.001).name("Camera X")
+        .listen();
         cameraControls.add(guiControls.camera, "y").step(0.001).name("Camera Y").listen();
         cameraControls.add(guiControls.camera, "z").step(0.001).name("Camera Z").listen();
 

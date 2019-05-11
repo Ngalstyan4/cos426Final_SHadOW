@@ -7,8 +7,8 @@ var CONFIG =
         wall2camera:false
     },
     PLAYGROUND: {
-        size: 1024,
-        divisions: 16,
-        wallHeight: 1024 / 1.7 // todo:: fix to refer to size inside the config
+        size: 2048,
+        divisions: 8,
+        wallHeight: 2048 / 1.7 // todo:: fix to refer to size inside the config
     }
 }

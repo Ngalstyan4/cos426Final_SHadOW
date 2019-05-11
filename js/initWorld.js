@@ -9,11 +9,13 @@ var scene;
 var renderer;
 var controls;
 var raycaster;
+var loader;
 
 function initWorld() {
 
     // Let there be Light !
     scene = new THREE.Scene();
+    loader = new THREE.TextureLoader();
     scene.fog = new THREE.Fog(0xcce0ff, 500, 10000);
 
     // Let there be someone to confirm there is Light !
@@ -21,7 +23,9 @@ function initWorld() {
     camera.position.x = 1690;
     camera.position.y = 1220
     camera.position.z = 704;
+    camera.lookAt(new THREE.Vector3(0,400,0))
     scene.add(camera);
+
 
     // todo  gui add handle
     if (CONFIG.DEBUG) {
@@ -52,9 +56,11 @@ function initWorld() {
 
     // mouse controls
     controls = new THREE.OrbitControls( camera, renderer.domElement );
-    controls.maxPolarAngle = Math.PI * 0.5;
+    controls.maxPolarAngle = Math.PI/2;
     controls.minDistance = 400;
-    controls.maxDistance = 3000;
+    controls.maxDistance = 6000;
+    // controls.target.set(-2000,-CONFIG.PLAYGROUND.wallHeight/2,0);
+
     // lights (fourth thing you need is lights)
 
     let light, materials;
@@ -72,7 +78,7 @@ function initWorld() {
     // light.shadow.camera.top = d;
     // light.shadow.camera.bottom = -d;
     // light.shadow.camera.far = 1000;
-
+    //
     // scene.add(light);
     // floor grid
     grid = new THREE.GridHelper( CONFIG.PLAYGROUND.size, CONFIG.PLAYGROUND.divisions );
@@ -84,7 +90,7 @@ function initWorld() {
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
     plane = new THREE.Mesh( geometry, material );
     plane.position.set(cellSideLen/2, 0, cellSideLen/2);
-    plane.rotation.x = Math.PI / 2;
+    plane.rotation.x = Math.PI;
     plane.castShadow = true;
     plane.receiveShadow = true;
     scene.add( plane );
@@ -131,18 +137,17 @@ function initWorld() {
     renderer.shadowMapHeight = 1024;
 
    let wall2 = wall1.clone();
-   let wall2shadow = new THREE.Mesh( wallGeometry, wallShadowMaterial );
+   wall2.rotation.y = Math.PI / 2;
 
+   let wall2shadow = new THREE.Mesh( wallGeometry, wallShadowMaterial );
+   wall2shadow.castShadow = true;
+   wall2shadow.receiveShadow = true;
+   wall2shadow.rotation.y = Math.PI / 2;
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-0.1,wallHeight/2,0);
-    wall2shadow.rotation.y = Math.PI / 2;
+    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-0.1,wallHeight/2,0);
     wall2.position.set(-CONFIG.PLAYGROUND.size/2-0.1,wallHeight/2,0);
-
-    wall2.rotation.y = Math.PI / 2;
-
-    wall2shadow.castShadow = true;
-    wall2shadow.receiveShadow = true;
 
     scene.add( wall2 );
     scene.add( wall2shadow );
@@ -178,7 +183,7 @@ function initWorld() {
         let wall2CameraHelper = new THREE.CameraHelper( wall2Light.shadow.camera );
         scene.add(wall2CameraHelper);
     }
-    
+
     // Add lights towards the walls END
 
 
