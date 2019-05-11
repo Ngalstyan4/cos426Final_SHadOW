@@ -19,7 +19,14 @@ function initGui() {
 
         gui.add(guiControls, "debug")
         .name("Debug Mode")
-        .onChange(v => CONFIG.DEBUG = v)
+        .onChange(v =>
+            {
+                CONFIG.DEBUG = v;
+                if (CONFIG.DEBUG)
+                    sceneDebugElems.forEach(e => scene.add(e));
+                else
+                    sceneDebugElems.forEach(e => scene.remove(e));
+            })
         .listen();
         let cameraControls = gui.addFolder("Camera");
 

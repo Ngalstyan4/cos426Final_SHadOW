@@ -9,6 +9,7 @@ var scene;
 var renderer;
 var controls;
 var raycaster;
+var sceneDebugElems = [];
 var loader;
 
 function initWorld() {
@@ -30,8 +31,9 @@ function initWorld() {
     // todo  gui add handle
     if (CONFIG.DEBUG) {
         // make axes a little longer than the game area
-        var axesHelper = new THREE.AxesHelper( CONFIG.PLAYGROUND.size/2 * 1.1 );
+        let axesHelper = new THREE.AxesHelper( CONFIG.PLAYGROUND.size/2 * 1.1 );
         scene.add( axesHelper );
+        sceneDebugElems.push(axesHelper);
     }
 
     // Add renderer

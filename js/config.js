@@ -8,7 +8,7 @@ var CONFIG =
     },
     PLAYGROUND: {
         size: 2048,
-        groundLevel:-600,
+        groundLevel:-1200,
         divisions: 8,
         wallHeight: 2048 / 1.7 // todo:: fix to refer to size inside the config
     }
