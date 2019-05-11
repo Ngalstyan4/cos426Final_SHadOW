@@ -98,6 +98,7 @@ function render() {
         let {x,y,z} = intersects[0].point;
         y -= CONFIG.PLAYGROUND.groundLevel;
 
+        var separation = 10;
         if (intersects[0].object !== wholePlane){
             var normal = intersects[0].face.normal.normalize();
             if (normal.equals(new THREE.Vector3(0,1,0)) || normal.equals(new THREE.Vector3(0,-1,0))){
@@ -109,9 +110,9 @@ function render() {
                 plane.position.x =  Math.sign(x) * (Math.abs(x) - Math.abs(x) % cellSideLen+cellSideLen/2);
 
                 if (normal.equals(new THREE.Vector3(0,1,0)))
-                    plane.position.y =  y + 1;
+                    plane.position.y =  y + separation;
                 else
-                    plane.position.y =  y - 1;
+                    plane.position.y =  y - separation;
 
                 plane.position.z =  Math.sign(z) * (Math.abs(z) - Math.abs(z) % cellSideLen+cellSideLen/2);
             }
@@ -121,9 +122,9 @@ function render() {
                 plane.rotation.z = 3.14/2;
 
                 if (normal.equals(new THREE.Vector3(1,0,0)))
-                    plane.position.x =  x + 1;
+                    plane.position.x =  x + separation;
                 else
-                    plane.position.x =  x - 1;
+                    plane.position.x =  x - separation;
 
                 plane.position.y =  Math.sign(y) * (Math.abs(y) - Math.abs(y) % cellSideLen +cellSideLen/2);
                 plane.position.z =  Math.sign(z) * (Math.abs(z) - Math.abs(z) % cellSideLen+cellSideLen/2);
@@ -137,9 +138,9 @@ function render() {
                 plane.position.y =  Math.sign(y) * (Math.abs(y) - Math.abs(y) % cellSideLen + cellSideLen/2);
 
                 if (normal.equals(new THREE.Vector3(0,0,1)))
-                    plane.position.z =  z + 1;
+                    plane.position.z =  z + separation;
                 else
-                    plane.position.z =  z - 1;
+                    plane.position.z =  z - separation;
             }
         }
         else{
@@ -148,7 +149,7 @@ function render() {
             plane.rotation.z = 0;
 
             plane.position.x =  Math.sign(x) * (Math.abs(x) - Math.abs(x) % cellSideLen+cellSideLen/2);
-            plane.position.y =  y + 1;
+            plane.position.y =  y + separation;
             plane.position.z =  Math.sign(z) * (Math.abs(z) - Math.abs(z) % cellSideLen+cellSideLen/2);
         }
 
