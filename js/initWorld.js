@@ -16,7 +16,7 @@ function initWorld() {
     // Let there be Light !
     scene = new THREE.Scene();
     loader = new THREE.TextureLoader();
-    scene.fog = new THREE.Fog(0xcce0ff, 500, 10000);
+    scene.fog = new THREE.Fog(0xcce0ff, 8000, 10000);
 
     // Let there be someone to confirm there is Light !
     camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight,1, 10000);
@@ -56,7 +56,7 @@ function initWorld() {
 
     // mouse controls
     controls = new THREE.OrbitControls( camera, renderer.domElement );
-    controls.maxPolarAngle = Math.PI/2;
+    controls.maxPolarAngle = Math.PI/1.5;
     controls.minDistance = 400;
     controls.maxDistance = 6000;
     // controls.target.set(-2000,-CONFIG.PLAYGROUND.wallHeight/2,0);
@@ -64,24 +64,25 @@ function initWorld() {
     // lights (fourth thing you need is lights)
 
     let light, materials;
-    // scene.add(new THREE.AmbientLight(0x666666));
-    // light = new THREE.DirectionalLight(0xdfebff, 1.75);
-    // light.position.set(50, 200, 100);
-    // light.position.multiplyScalar(1.3);
-    // light.castShadow = true;
-    // light.shadow.mapSize.width = 1024;
-    // light.shadow.mapSize.height = 1024;
-    //
-    // let d = 300;
-    // light.shadow.camera.left = -d;
-    // light.shadow.camera.right = d;
-    // light.shadow.camera.top = d;
-    // light.shadow.camera.bottom = -d;
-    // light.shadow.camera.far = 1000;
-    //
-    // scene.add(light);
+    scene.add(new THREE.AmbientLight(0x666666));
+    light = new THREE.DirectionalLight(0xdfebff, 1.75);
+    light.position.set(50, 200, 100);
+    light.position.multiplyScalar(1.3);
+    light.castShadow = true;
+    light.shadow.mapSize.width = 1024;
+    light.shadow.mapSize.height = 1024;
+
+    let d = 300;
+    light.shadow.camera.left = -d;
+    light.shadow.camera.right = d;
+    light.shadow.camera.top = d;
+    light.shadow.camera.bottom = -d;
+    light.shadow.camera.far = 1000;
+
+    scene.add(light);
     // floor grid
     grid = new THREE.GridHelper( CONFIG.PLAYGROUND.size, CONFIG.PLAYGROUND.divisions );
+    grid.translateY(CONFIG.PLAYGROUND.groundLevel);
     scene.add( grid );
 
     // hover highlight plane
@@ -89,7 +90,7 @@ function initWorld() {
     var geometry = new THREE.PlaneGeometry( cellSideLen, cellSideLen, 32 );
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
     plane = new THREE.Mesh( geometry, material );
-    plane.position.set(cellSideLen/2, 0, cellSideLen/2);
+    plane.position.set(cellSideLen/2, CONFIG.PLAYGROUND.groundLevel, cellSideLen/2);
     plane.rotation.x = Math.PI;
     plane.castShadow = true;
     plane.receiveShadow = true;
@@ -100,7 +101,7 @@ function initWorld() {
     var material = new THREE.MeshBasicMaterial( {color: 0x00ffff, side: THREE.DoubleSide, opacity:0} );
     material.transparent = true;
     wholePlane = new THREE.Mesh( geometry, material );
-    wholePlane.position.set(0,0,0);
+    wholePlane.position.set(0,CONFIG.PLAYGROUND.groundLevel,0);
     wholePlane.rotation.x = Math.PI / 2;
 
     scene.add( wholePlane );
@@ -115,8 +116,8 @@ function initWorld() {
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge
-    wall1.position.set(0,wallHeight/2,-CONFIG.PLAYGROUND.size/2-0.1);
-    wall1shadow.position.set(0,wallHeight/2,-CONFIG.PLAYGROUND.size/2-0.1);
+    wall1.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-0.1);
+    wall1shadow.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-0.1);
     // wholePlane.rotation.x = Math.PI / 2;
     wall1shadow.castShadow = true;
     wall1shadow.receiveShadow = true;
@@ -146,8 +147,8 @@ function initWorld() {
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-0.1,wallHeight/2,0);
-    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-0.1,wallHeight/2,0);
-    wall2.position.set(-CONFIG.PLAYGROUND.size/2-0.1,wallHeight/2,0);
+    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-0.1,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,0);
+    wall2.position.set(-CONFIG.PLAYGROUND.size/2-0.1,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,0);
 
     scene.add( wall2 );
     scene.add( wall2shadow );
@@ -165,13 +166,13 @@ function initWorld() {
     wall2Light.shadow.camera.near = 0.5;    // default
     wall2Light.shadow.camera.left = -CONFIG.PLAYGROUND.size/2;
     wall2Light.shadow.camera.right = CONFIG.PLAYGROUND.size/2;
-    wall2Light.shadow.camera.top = wallHeight;
-    wall2Light.shadow.camera.bottom = 0;
+    wall2Light.shadow.camera.top = wallHeight+CONFIG.PLAYGROUND.groundLevel;
+    wall2Light.shadow.camera.bottom = CONFIG.PLAYGROUND.groundLevel;
     wall2Light.shadow.camera.far = CONFIG.PLAYGROUND.size*2;
 
     scene.add( wall2Light );
     let wall1Light = wall2Light.clone();
-    wall2Light.position.set( 0, 0, CONFIG.PLAYGROUND.size); 			//default; light shining from top
+    wall1Light.position.set( 0, 0, CONFIG.PLAYGROUND.size); 			//default; light shining from top
     scene.add( wall1Light );
 
     if (CONFIG.HELPER_STRUCTS.wall1camera) {

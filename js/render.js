@@ -36,6 +36,8 @@ function render() {
         var intersects = raycaster.intersectObjects( intersectArray );
         if ( intersects.length > 0 ) {
             let {x,y,z} = intersects[0].point;
+            // change the coordinate system
+            y -= CONFIG.PLAYGROUND.groundLevel;
 
             if (intersects[0].object !== wholePlane){
                 var normal = intersects[0].face.normal.normalize();
@@ -82,7 +84,8 @@ function render() {
             scene.add( cube );
 
             meshes.push(cube);
-
+            // change the coordinate system
+            y += CONFIG.PLAYGROUND.groundLevel;
             cube.position.set(x,y,z);
         }
         click = false;
@@ -93,6 +96,7 @@ function render() {
     var intersects = raycaster.intersectObjects( intersectArray );
     if ( intersects.length > 0 ) {
         let {x,y,z} = intersects[0].point;
+        y -= CONFIG.PLAYGROUND.groundLevel;
 
         if (intersects[0].object !== wholePlane){
             var normal = intersects[0].face.normal.normalize();
@@ -147,6 +151,8 @@ function render() {
             plane.position.y =  y + 1;
             plane.position.z =  Math.sign(z) * (Math.abs(z) - Math.abs(z) % cellSideLen+cellSideLen/2);
         }
+
+        plane.position.y += CONFIG.PLAYGROUND.groundLevel;
     }
     /* Render mouse hover effects END */
 
