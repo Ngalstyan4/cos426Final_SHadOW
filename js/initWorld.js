@@ -159,7 +159,7 @@ function initWorld() {
     // Add lights towards the walls BEGIN
 
     //Create a DirectionalLight and turn on shadows for the light
-    let wall2Light = new THREE.DirectionalLight( 0xff0000, 1000, 100 );
+    let wall2Light = new THREE.DirectionalLight( 0xff0000, 0, 100 );
     wall2Light.position.set( CONFIG.PLAYGROUND.size, 0, 0 ); 			//default; light shining from top
     wall2Light.castShadow = true;            // default false
     //Set up shadow properties for the light

@@ -77,9 +77,9 @@ function render() {
 
             var geometry = new THREE.BoxGeometry( cellSideLen, cellSideLen, cellSideLen );
             // todo:: consider lambert and Phong materials here
-            var material = new THREE.MeshLambertMaterial( {map: loader.load('assets/textures/wood1.jpg')} );
-
-            var cube = new THREE.Mesh( geometry, material );
+            var materials = [1,2,3,4].map(i => new THREE.MeshLambertMaterial( {map: loader.load('assets/textures/wood' + i + '.jpg')} ));
+            let ind = Math.floor(Math.random() * materials.length);
+            var cube = new THREE.Mesh( geometry, materials[ind] );
             cube.castShadow =true;
             scene.add( cube );
 
