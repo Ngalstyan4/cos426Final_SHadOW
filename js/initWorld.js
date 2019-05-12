@@ -118,8 +118,8 @@ function initWorld() {
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge
-    wall1.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-0.1);
-    wall1shadow.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-0.1);
+    wall1.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10);
+    wall1shadow.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10);
     // wholePlane.rotation.x = Math.PI / 2;
     wall1shadow.castShadow = true;
     wall1shadow.receiveShadow = true;
@@ -149,8 +149,8 @@ function initWorld() {
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-0.1,wallHeight/2,0);
-    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-0.1,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,0);
-    wall2.position.set(-CONFIG.PLAYGROUND.size/2-0.1,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,0);
+    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-10,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,0);
+    wall2.position.set(-CONFIG.PLAYGROUND.size/2-10,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,0);
 
     scene.add( wall2 );
     scene.add( wall2shadow );

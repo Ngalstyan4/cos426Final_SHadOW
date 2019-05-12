@@ -10,6 +10,6 @@ var CONFIG =
         size: 2048,
         groundLevel:-700,
         divisions: 8,
-        wallHeight: 2048 / 1.7 // todo:: fix to refer to size inside the config
+        wallHeight: 2048 / 8 * 5 // todo:: fix to refer to size inside the config
     }
 }

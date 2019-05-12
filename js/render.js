@@ -3,6 +3,86 @@
 if (!Detector.webgl) Detector.addGetWebGLMessage();
 
 var meshes = [];
+var goal = [];
+var win = false;
+
+function deleteBlocks(){
+    for (var i = 0; i<meshes.length;i++){
+        scene.remove(meshes[i]);
+    }
+    meshes = [];
+}
+
+function deleteGoal(){
+    for (var i = 0; i<goal.length;i++){
+        scene.remove(goal[i]);
+    }
+    goal = [];
+}
+
+
+function checkWinCondition(){
+    for (var i = 0; i< walls[0].length; i++){
+        for (var j = 0; j< walls[0][i].length; j++){
+            if (walls[0][i][j] !== target[0][i][j])
+                return;
+            if (walls[1][i][j] !== target[1][i][j])
+                return;
+        }
+    }
+    win = true;
+}
+
+function addGoal(targets){
+    for(var i=0; i< targets[0].length; i++){
+        for (var j=0; j< targets[0][i].length; j++){
+            if (targets[0][i][j]===true){
+                var cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions
+                var geometry = new THREE.PlaneGeometry( cellSideLen, cellSideLen, 32 );
+                var material = new THREE.MeshNormalMaterial();
+                var shadowMaterial = new THREE.ShadowMaterial();
+                shadowMaterial.opacity = 0.3;
+                var goalPlane = new THREE.Mesh( geometry, material );
+                var goalPlaneShadow = new THREE.Mesh(geometry, shadowMaterial);
+
+                goalPlane.position.set(cellSideLen*j + cellSideLen/2 -CONFIG.PLAYGROUND.size/2, CONFIG.PLAYGROUND.groundLevel+cellSideLen*i + cellSideLen/2,-CONFIG.PLAYGROUND.size/2 +10);
+                goalPlaneShadow.position.set(cellSideLen*j + cellSideLen/2 -CONFIG.PLAYGROUND.size/2, CONFIG.PLAYGROUND.groundLevel+cellSideLen*i + cellSideLen/2,-CONFIG.PLAYGROUND.size/2 +10);
+
+                goalPlaneShadow.castShadow = true;
+                goalPlaneShadow.receiveShadow = true;
+                scene.add( goalPlane );
+                scene.add( goalPlaneShadow );
+
+                goal.push(goalPlane);
+                goal.push(goalPlaneShadow);
+            }
+
+            if (targets[1][i][j]===true){
+                var cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions
+                var geometry = new THREE.PlaneGeometry( cellSideLen, cellSideLen, 32 );
+                var material = new THREE.MeshNormalMaterial();
+                var shadowMaterial = new THREE.ShadowMaterial();
+                shadowMaterial.opacity = 0.3;
+                var goalPlane = new THREE.Mesh( geometry, material );
+                var goalPlaneShadow = new THREE.Mesh(geometry, shadowMaterial);
+
+                goalPlane.position.set(-CONFIG.PLAYGROUND.size/2 +10, CONFIG.PLAYGROUND.groundLevel+cellSideLen*i + cellSideLen/2,cellSideLen*j + cellSideLen/2 -CONFIG.PLAYGROUND.size/2);
+                goalPlaneShadow.position.set(-CONFIG.PLAYGROUND.size/2 +10, CONFIG.PLAYGROUND.groundLevel+cellSideLen*i + cellSideLen/2,cellSideLen*j + cellSideLen/2 -CONFIG.PLAYGROUND.size/2);
+
+                goalPlane.rotation.y = Math.PI/2;
+                goalPlaneShadow.rotation.y = Math.PI/2;
+
+                goalPlaneShadow.castShadow = true;
+                goalPlaneShadow.receiveShadow = true;
+                scene.add( goalPlane );
+                scene.add( goalPlaneShadow );
+
+                goal.push(goalPlane);
+                goal.push(goalPlaneShadow);
+            }
+        }
+    }
+}
 
  //all below defined in initWorld BEGIN
  // var stats;
@@ -16,6 +96,12 @@ var meshes = [];
 function render() {
 
     let timer = Date.now() * 0.0002;
+
+    if (win){
+        alert("Congrats! You beat this level!");
+        win = false;
+    }
+
     // option to auto-rotate camera
     // if (rotate) {
     //     let cameraRadius = Math.sqrt(
@@ -87,6 +173,19 @@ function render() {
             // change the coordinate system
             y += CONFIG.PLAYGROUND.groundLevel;
             cube.position.set(x,y,z);
+            
+            if (game){
+                var shadowX = Math.round((x + CONFIG.PLAYGROUND.size/2)/cellSideLen-0.5);
+                var shadowY = Math.round((y-CONFIG.PLAYGROUND.groundLevel) / cellSideLen-0.5);
+                var shadowZ = Math.round((z + CONFIG.PLAYGROUND.size/2)/cellSideLen-0.5);
+
+                if (shadowX >=0 && shadowX < walls[0][0].length && shadowY >=0 && shadowY < walls[0].length)       
+                    walls[0][shadowY][shadowX]= true;
+                if (shadowZ >=0 && shadowZ < walls[0][0].length && shadowY >=0 && shadowY < walls[0].length)  
+                    walls[1][shadowY][shadowZ]= true;
+
+                checkWinCondition();
+            }
         }
         click = false;
     }

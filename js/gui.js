@@ -3,6 +3,13 @@
 // var camera;
 //all below defined in initWorld END
 
+var reader = new (function(){
+    this.filename = "none";
+    this.changeLevel = function(){
+        setLevel(reader.filename + ".txt");
+    }
+})();
+
 function initGui() {
 
     var guiEnabled = true;
@@ -34,6 +41,12 @@ function initGui() {
         .listen();
         cameraControls.add(guiControls.camera, "y").step(0.001).name("Camera Y").listen();
         cameraControls.add(guiControls.camera, "z").step(0.001).name("Camera Z").listen();
+
+        
+        gui.add(reader, 'filename', [ 'none', '2-3', 'House-Duck' ] );
+        gui.add(reader, 'changeLevel');
+
+
 
         // let sizeControl = gui
         //   .add(guiControls, "fabricLength", 200, 1000)

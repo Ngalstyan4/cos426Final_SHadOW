@@ -26,14 +26,14 @@ function onDocumentMouseMove( event ) {
 }
 
 function onDocumentMouseDown( event ) {
-    event.preventDefault();
+    //event.preventDefault();
     clickMouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     clickMouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
     potentialClick = true;
 }
 
 function onDocumentMouseUp( event ) {
-    event.preventDefault();
+    //event.preventDefault();
     if (potentialClick) click = true;
 }
 
