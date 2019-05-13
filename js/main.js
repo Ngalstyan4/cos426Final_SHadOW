@@ -2,7 +2,6 @@
 
 var game = false;
 var target = new Array(2);
-var walls = new Array(2);
 
 function setLevel(fileName){
     var loader = new THREE.FileLoader();
@@ -53,17 +52,6 @@ function setLevel(fileName){
                         target[1][i][gridSize-1-j]=true;
                     else
                         target[1][i][gridSize-1-j]=false;
-                }   
-            }
-
-            walls[0] = new Array(height);
-            walls[1] = new Array(height);
-            for (var i = 0; i<height; i++){
-                walls[0][i] = new Array(gridSize);
-                walls[1][i] = new Array(gridSize);
-                for (var j = 0; j<gridSize; j++){
-                    walls[0][i][j]=false;
-                    walls[1][i][j]=false;
                 }   
             }
 

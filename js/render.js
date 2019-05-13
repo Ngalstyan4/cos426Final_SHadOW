@@ -22,6 +22,30 @@ function deleteGoal(){
 
 
 function checkWinCondition(){
+    var walls = new Array(2);
+    for (var r = 0; r<2; r++){
+        walls[r] = new Array(target[0].length);
+        for (var i = 0; i< target[0].length; i++){
+            walls[r][i] = new Array(target[0][0].length);
+            for (var j = 0; j< walls[0][i].length; j++){
+                walls[r][i][j] = false;
+            }
+        }
+    }
+
+    for (var i = 0; i< meshes.length; i++){
+        var cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions;
+        var vec = meshes[i].position;
+        var shadowX = Math.round((vec.x + CONFIG.PLAYGROUND.size/2)/cellSideLen-0.5);
+        var shadowY = Math.round((vec.y-CONFIG.PLAYGROUND.groundLevel) / cellSideLen-0.5);
+        var shadowZ = Math.round((vec.z + CONFIG.PLAYGROUND.size/2)/cellSideLen-0.5);
+
+        if (shadowX >=0 && shadowX < walls[0][0].length && shadowY >=0 && shadowY < walls[0].length)       
+            walls[0][shadowY][shadowX]= true;
+        if (shadowZ >=0 && shadowZ < walls[0][0].length && shadowY >=0 && shadowY < walls[0].length)  
+            walls[1][shadowY][shadowZ]= true;
+    }
+
     for (var i = 0; i< walls[0].length; i++){
         for (var j = 0; j< walls[0][i].length; j++){
             if (walls[0][i][j] !== target[0][i][j])
@@ -37,7 +61,7 @@ function addGoal(targets){
     for(var i=0; i< targets[0].length; i++){
         for (var j=0; j< targets[0][i].length; j++){
             if (targets[0][i][j]===true){
-                var cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions
+                var cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions;
                 var geometry = new THREE.PlaneGeometry( cellSideLen, cellSideLen, 32 );
                 var material = new THREE.MeshNormalMaterial();
                 var shadowMaterial = new THREE.ShadowMaterial();
@@ -58,7 +82,7 @@ function addGoal(targets){
             }
 
             if (targets[1][i][j]===true){
-                var cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions
+                var cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions;
                 var geometry = new THREE.PlaneGeometry( cellSideLen, cellSideLen, 32 );
                 var material = new THREE.MeshNormalMaterial();
                 var shadowMaterial = new THREE.ShadowMaterial();
@@ -246,15 +270,6 @@ function render() {
             cube.position.set(x,y,z);
             
             if (game){
-                var shadowX = Math.round((x + CONFIG.PLAYGROUND.size/2)/cellSideLen-0.5);
-                var shadowY = Math.round((y-CONFIG.PLAYGROUND.groundLevel) / cellSideLen-0.5);
-                var shadowZ = Math.round((z + CONFIG.PLAYGROUND.size/2)/cellSideLen-0.5);
-
-                if (shadowX >=0 && shadowX < walls[0][0].length && shadowY >=0 && shadowY < walls[0].length)       
-                    walls[0][shadowY][shadowX]= true;
-                if (shadowZ >=0 && shadowZ < walls[0][0].length && shadowY >=0 && shadowY < walls[0].length)  
-                    walls[1][shadowY][shadowZ]= true;
-
                 checkWinCondition();
             }
         }
