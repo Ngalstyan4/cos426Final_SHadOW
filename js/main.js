@@ -88,4 +88,6 @@ function setLevel(fileName){
     initEventHandlers();
     animate();
     initGui();
+    setLevel(reader.filename + ".txt");
+
 })()
