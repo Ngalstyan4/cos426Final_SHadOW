@@ -42,7 +42,7 @@ function initGui() {
         cameraControls.add(guiControls.camera, "z").step(0.001).name("Camera Z").listen();
 
         
-        gui.add(reader, 'filename', [ 'none', 'line', '2-3', '2-5', 'tensorflow', 'House-Duck' ] ).name("CHOOSE LEVEL").
+        gui.add(reader, 'filename', [ 'none', 'line', '2-3', '2-5', 'tensorflow', 'CHALLENGE', 'House-Duck' ] ).name("CHOOSE LEVEL").
         onChange(v => {
             setLevel(v + ".txt")
             if (v == "House-Duck") {
