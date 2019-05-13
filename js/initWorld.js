@@ -12,6 +12,8 @@ var raycaster;
 var sceneDebugElems = [];
 var loader;
 
+var wall1, wall1shadow, wall2,wall2shadow;
+
 function initWorld() {
 
     // Let there be Light !
@@ -113,8 +115,8 @@ function initWorld() {
     let wallGeometry = new THREE.PlaneGeometry( CONFIG.PLAYGROUND.size, wallHeight, 32 );
     let wallMaterial = new THREE.MeshBasicMaterial( {color: 0xcccccc, side: THREE.DoubleSide, opacity: 0.8} );
     let wallShadowMaterial = new THREE.ShadowMaterial()
-    let wall1 = new THREE.Mesh( wallGeometry, wallMaterial );
-    let wall1shadow = new THREE.Mesh( wallGeometry, wallShadowMaterial );
+    wall1 = new THREE.Mesh( wallGeometry, wallMaterial );
+    wall1shadow = new THREE.Mesh( wallGeometry, wallShadowMaterial );
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge
@@ -139,10 +141,10 @@ function initWorld() {
     renderer.shadowMapWidth = 1024;
     renderer.shadowMapHeight = 1024;
 
-   let wall2 = wall1.clone();
+   wall2 = wall1.clone();
    wall2.rotation.y = Math.PI / 2;
 
-   let wall2shadow = new THREE.Mesh( wallGeometry, wallShadowMaterial );
+   wall2shadow = new THREE.Mesh( wallGeometry, wallShadowMaterial );
    wall2shadow.castShadow = true;
    wall2shadow.receiveShadow = true;
    wall2shadow.rotation.y = Math.PI / 2;
@@ -192,4 +194,77 @@ function initWorld() {
 
 
     raycaster = new THREE.Raycaster();
+}
+
+function updateWorldSize(){
+    scene.remove(grid);
+    scene.remove(plane);
+    scene.remove(wholePlane);
+    scene.remove(wall1);
+    scene.remove(wall1shadow);
+    scene.remove(wall2);
+    scene.remove(wall2shadow);
+
+    // floor grid
+    grid = new THREE.GridHelper( CONFIG.PLAYGROUND.size, CONFIG.PLAYGROUND.divisions );
+    grid.translateY(CONFIG.PLAYGROUND.groundLevel);
+    scene.add( grid );
+
+    // hover highlight plane
+    let cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions;
+    var geometry = new THREE.PlaneGeometry( cellSideLen, cellSideLen, 32 );
+    var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+    plane = new THREE.Mesh( geometry, material );
+    plane.position.set(cellSideLen/2, CONFIG.PLAYGROUND.groundLevel, cellSideLen/2);
+    plane.rotation.x = Math.PI;
+    plane.castShadow = true;
+    plane.receiveShadow = true;
+    scene.add( plane );
+
+    // Add a transparent plane on the floor to easily do raycasting
+    var geometry = new THREE.PlaneGeometry( CONFIG.PLAYGROUND.size, CONFIG.PLAYGROUND.size, 32 );
+    var material = new THREE.MeshBasicMaterial( {color: 0x00ffff, side: THREE.DoubleSide, opacity:0} );
+    material.transparent = true;
+    wholePlane = new THREE.Mesh( geometry, material );
+    wholePlane.position.set(0,CONFIG.PLAYGROUND.groundLevel,0);
+    wholePlane.rotation.x = Math.PI / 2;
+
+    scene.add( wholePlane );
+
+    // Add walls BEGIN
+    let wallHeight = CONFIG.PLAYGROUND.wallHeight
+    let wallGeometry = new THREE.PlaneGeometry( CONFIG.PLAYGROUND.size, wallHeight, 32 );
+    let wallMaterial = new THREE.MeshBasicMaterial( {color: 0xcccccc, side: THREE.DoubleSide, opacity: 0.8} );
+    let wallShadowMaterial = new THREE.ShadowMaterial()
+    wall1 = new THREE.Mesh( wallGeometry, wallMaterial );
+    wall1shadow = new THREE.Mesh( wallGeometry, wallShadowMaterial );
+    // -0.1 corrections in next 2 lines just make sure that an object on
+    // the playground does not cast a shadow on the wall next to it
+    // if it ends up on a block right next to the edge
+    wall1.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10);
+    wall1shadow.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10);
+    // wholePlane.rotation.x = Math.PI / 2;
+    wall1shadow.castShadow = true;
+    wall1shadow.receiveShadow = true;
+
+    scene.add( wall1 );
+    scene.add( wall1shadow );
+
+   wall2 = wall1.clone();
+   wall2.rotation.y = Math.PI / 2;
+
+   wall2shadow = new THREE.Mesh( wallGeometry, wallShadowMaterial );
+   wall2shadow.castShadow = true;
+   wall2shadow.receiveShadow = true;
+   wall2shadow.rotation.y = Math.PI / 2;
+    // -0.1 corrections in next 2 lines just make sure that an object on
+    // the playground does not cast a shadow on the wall next to it
+    // if it ends up on a block right next to the edge    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-0.1,wallHeight/2,0);
+    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-10,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,0);
+    wall2.position.set(-CONFIG.PLAYGROUND.size/2-10,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,0);
+
+    scene.add( wall2 );
+    scene.add( wall2shadow );
+    // Add walls END
+
 }

@@ -46,6 +46,9 @@ function checkWinCondition(){
             walls[1][shadowY][shadowZ]= true;
     }
 
+    console.log(walls);
+    console.log(target);
+
     for (var i = 0; i< walls[0].length; i++){
         for (var j = 0; j< walls[0][i].length; j++){
             if (walls[0][i][j] !== target[0][i][j])
@@ -54,6 +57,7 @@ function checkWinCondition(){
                 return;
         }
     }
+
     win = true;
 }
 
@@ -69,7 +73,7 @@ function addGoal(targets){
                 var goalPlane = new THREE.Mesh( geometry, material );
                 var goalPlaneShadow = new THREE.Mesh(geometry, shadowMaterial);
 
-                goalPlane.position.set(cellSideLen*j + cellSideLen/2 -CONFIG.PLAYGROUND.size/2, CONFIG.PLAYGROUND.groundLevel+cellSideLen*i + cellSideLen/2,-CONFIG.PLAYGROUND.size/2 +10);
+                goalPlane.position.set(cellSideLen*j + cellSideLen/2-CONFIG.PLAYGROUND.size/2, CONFIG.PLAYGROUND.groundLevel+cellSideLen*i + cellSideLen/2,-CONFIG.PLAYGROUND.size/2 +10);
                 goalPlaneShadow.position.set(cellSideLen*j + cellSideLen/2 -CONFIG.PLAYGROUND.size/2, CONFIG.PLAYGROUND.groundLevel+cellSideLen*i + cellSideLen/2,-CONFIG.PLAYGROUND.size/2 +10);
 
                 goalPlaneShadow.castShadow = true;
@@ -217,6 +221,7 @@ function render() {
                     console.log(intersects, intersectArray, intersectArray.indexOf(intersects[0].object));
                     scene.remove(intersects[0].object);
                     meshes = meshes.filter(o => o !==intersects[0].object);
+                    checkWinCondition();
                     click = false;
                     return;
                 }
@@ -268,7 +273,7 @@ function render() {
             // change the coordinate system
             y += CONFIG.PLAYGROUND.groundLevel;
             cube.position.set(x,y,z);
-            
+
             if (game){
                 checkWinCondition();
             }

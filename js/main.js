@@ -31,6 +31,10 @@ function setLevel(fileName){
             var gridSize = parseInt(numbers[0]);
             var height = parseInt(numbers[1]);
 
+            CONFIG.PLAYGROUND.divisions = gridSize;
+            CONFIG.PLAYGROUND.wallHeight = CONFIG.PLAYGROUND.size / gridSize * height;
+            updateWorldSize();
+
             target[0] = new Array(height);
             // create boolean arrays
             for (var i = 0; i<height; i++){
@@ -77,5 +81,4 @@ function setLevel(fileName){
     animate();
     initGui();
     setLevel(reader.filename + ".txt");
-
 })()
