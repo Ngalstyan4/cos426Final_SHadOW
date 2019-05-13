@@ -17,11 +17,12 @@ function initGui() {
         let guiControls = new (function() {
             this.camera = camera.position;
             this.debug = CONFIG.DEBUG;
+            this.newLevel = ""
         })();
 
         // GUI elements
         let gui = new dat.GUI();
-
+        gui.add({saveLevel}, "saveLevel").name("Save Level");
         gui.add(guiControls, "debug")
         .name("Debug Mode")
         .onChange(v =>
@@ -86,4 +87,18 @@ function initGui() {
         //   });
 
     }
+}
+
+function saveLevel() {
+    let res = walls[0].reverse().map(wall => wall.map(a => a? "X":".").reduce((a,b) => a + " " + b )).reduce((a,b) => a+"\n"+b);
+    res += "\n\n";
+    res += walls[1].reverse().map(wall => wall.reverse().map(a => a? "X":".").reduce((a,b) => a + " " + b )).reduce((a,b) => a+"\n"+b);
+    $('#exampleModalLabel').text("This is encoding of the level you created!!");
+    let htm = "<p>Please share it with us in the feedback form <a target='blank' href='https://forms.gle/Zjo4zGi1SFiV4siv6'>here</a><!/p><textarea style='width:200px; height:300px;' type='text' class='form-control classname' id='copy-input' cols=40 rows=20readonly>"+res+"</textarea>";
+    htm += "<a href='#' id='copy' data-clipboard-target='#copy-input' class='btn btn-default'>Copy input content to clipboard</a>"
+    $('.modal-body').html(htm);
+    $('#gameModal').modal('show');
+    var clipboard = new Clipboard('#copy');
+
+
 }
