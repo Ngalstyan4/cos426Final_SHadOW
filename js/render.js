@@ -35,19 +35,21 @@ function checkWinCondition(){
 
     for (var i = 0; i< meshes.length; i++){
         var cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions;
+        var sub = 0;
+        if (CONFIG.PLAYGROUND.divisions % 2 == 1){
+            sub = 0.5;
+        }
+
         var vec = meshes[i].position;
-        var shadowX = Math.round((vec.x + CONFIG.PLAYGROUND.size/2)/cellSideLen-0.5);
+        var shadowX = Math.round((vec.x + CONFIG.PLAYGROUND.size/2)/cellSideLen-0.5+sub);
         var shadowY = Math.round((vec.y-CONFIG.PLAYGROUND.groundLevel) / cellSideLen-0.5);
-        var shadowZ = Math.round((vec.z + CONFIG.PLAYGROUND.size/2)/cellSideLen-0.5);
+        var shadowZ = Math.round((vec.z + CONFIG.PLAYGROUND.size/2)/cellSideLen-0.5+sub);
 
         if (shadowX >=0 && shadowX < walls[0][0].length && shadowY >=0 && shadowY < walls[0].length)       
             walls[0][shadowY][shadowX]= true;
         if (shadowZ >=0 && shadowZ < walls[0][0].length && shadowY >=0 && shadowY < walls[0].length)  
             walls[1][shadowY][shadowZ]= true;
     }
-
-    console.log(walls);
-    console.log(target);
 
     for (var i = 0; i< walls[0].length; i++){
         for (var j = 0; j< walls[0][i].length; j++){
@@ -62,10 +64,15 @@ function checkWinCondition(){
 }
 
 function addGoal(targets){
+    var cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions;
+    var sub = 0;
+    if (CONFIG.PLAYGROUND.divisions % 2 == 1){
+        sub = -cellSideLen / 2;
+    }
+    var sep = -2;
     for(var i=0; i< targets[0].length; i++){
         for (var j=0; j< targets[0][i].length; j++){
             if (targets[0][i][j]===true){
-                var cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions;
                 var geometry = new THREE.PlaneGeometry( cellSideLen, cellSideLen, 32 );
                 var material = new THREE.MeshNormalMaterial();
                 var shadowMaterial = new THREE.ShadowMaterial();
@@ -73,8 +80,8 @@ function addGoal(targets){
                 var goalPlane = new THREE.Mesh( geometry, material );
                 var goalPlaneShadow = new THREE.Mesh(geometry, shadowMaterial);
 
-                goalPlane.position.set(cellSideLen*j + cellSideLen/2-CONFIG.PLAYGROUND.size/2, CONFIG.PLAYGROUND.groundLevel+cellSideLen*i + cellSideLen/2,-CONFIG.PLAYGROUND.size/2 +10);
-                goalPlaneShadow.position.set(cellSideLen*j + cellSideLen/2 -CONFIG.PLAYGROUND.size/2, CONFIG.PLAYGROUND.groundLevel+cellSideLen*i + cellSideLen/2,-CONFIG.PLAYGROUND.size/2 +10);
+                goalPlane.position.set(cellSideLen*j + cellSideLen/2-CONFIG.PLAYGROUND.size/2+sub, CONFIG.PLAYGROUND.groundLevel+cellSideLen*i + cellSideLen/2,-CONFIG.PLAYGROUND.size/2 +sep+sub);
+                goalPlaneShadow.position.set(cellSideLen*j + cellSideLen/2 -CONFIG.PLAYGROUND.size/2+sub, CONFIG.PLAYGROUND.groundLevel+cellSideLen*i + cellSideLen/2,-CONFIG.PLAYGROUND.size/2 +sep+sub);
 
                 goalPlaneShadow.castShadow = true;
                 goalPlaneShadow.receiveShadow = true;
@@ -86,7 +93,6 @@ function addGoal(targets){
             }
 
             if (targets[1][i][j]===true){
-                var cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions;
                 var geometry = new THREE.PlaneGeometry( cellSideLen, cellSideLen, 32 );
                 var material = new THREE.MeshNormalMaterial();
                 var shadowMaterial = new THREE.ShadowMaterial();
@@ -94,8 +100,8 @@ function addGoal(targets){
                 var goalPlane = new THREE.Mesh( geometry, material );
                 var goalPlaneShadow = new THREE.Mesh(geometry, shadowMaterial);
 
-                goalPlane.position.set(-CONFIG.PLAYGROUND.size/2 +10, CONFIG.PLAYGROUND.groundLevel+cellSideLen*i + cellSideLen/2,cellSideLen*j + cellSideLen/2 -CONFIG.PLAYGROUND.size/2);
-                goalPlaneShadow.position.set(-CONFIG.PLAYGROUND.size/2 +10, CONFIG.PLAYGROUND.groundLevel+cellSideLen*i + cellSideLen/2,cellSideLen*j + cellSideLen/2 -CONFIG.PLAYGROUND.size/2);
+                goalPlane.position.set(-CONFIG.PLAYGROUND.size/2 +sep+sub, CONFIG.PLAYGROUND.groundLevel+cellSideLen*i + cellSideLen/2,cellSideLen*j + cellSideLen/2 -CONFIG.PLAYGROUND.size/2+sub);
+                goalPlaneShadow.position.set(-CONFIG.PLAYGROUND.size/2 +sep+sub, CONFIG.PLAYGROUND.groundLevel+cellSideLen*i + cellSideLen/2,cellSideLen*j + cellSideLen/2 -CONFIG.PLAYGROUND.size/2+sub);
 
                 goalPlane.rotation.y = Math.PI/2;
                 goalPlaneShadow.rotation.y = Math.PI/2;
@@ -206,6 +212,7 @@ function render() {
     let cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions;
     var intersectArray = meshes.slice();
     intersectArray.push(wholePlane);
+
 
     if (click){
         raycaster.setFromCamera( clickMouse, camera );

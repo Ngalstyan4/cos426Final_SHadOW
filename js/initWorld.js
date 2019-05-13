@@ -12,7 +12,8 @@ var raycaster;
 var sceneDebugElems = [];
 var loader;
 
-var wall1, wall1shadow, wall2,wall2shadow;
+// Objects to update reference
+var wall1, wall1shadow, wall2,wall2shadow, wall1Light, wall2Light;
 
 function initWorld() {
 
@@ -161,7 +162,7 @@ function initWorld() {
     // Add lights towards the walls BEGIN
 
     //Create a DirectionalLight and turn on shadows for the light
-    let wall2Light = new THREE.DirectionalLight( 0xff0000, 0, 100 );
+    wall2Light = new THREE.DirectionalLight( 0xff0000, 0, 100 );
     wall2Light.position.set( CONFIG.PLAYGROUND.size, 0, 0 ); 			//default; light shining from top
     wall2Light.castShadow = true;            // default false
     //Set up shadow properties for the light
@@ -175,7 +176,7 @@ function initWorld() {
     wall2Light.shadow.camera.far = CONFIG.PLAYGROUND.size*2;
 
     scene.add( wall2Light );
-    let wall1Light = wall2Light.clone();
+    wall1Light = wall2Light.clone();
     wall1Light.position.set( 0, 0, CONFIG.PLAYGROUND.size); 			//default; light shining from top
     scene.add( wall1Light );
 
@@ -204,14 +205,24 @@ function updateWorldSize(){
     scene.remove(wall1shadow);
     scene.remove(wall2);
     scene.remove(wall2shadow);
+    scene.remove(wall1Light);
+    scene.remove(wall2Light);
+
+
+    let cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions;
+    var sub = 0;
+    if (CONFIG.PLAYGROUND.divisions % 2 == 1){
+        sub = -cellSideLen / 2;
+    }
 
     // floor grid
     grid = new THREE.GridHelper( CONFIG.PLAYGROUND.size, CONFIG.PLAYGROUND.divisions );
     grid.translateY(CONFIG.PLAYGROUND.groundLevel);
+    grid.translateX(sub);
+    grid.translateZ(sub);
     scene.add( grid );
 
     // hover highlight plane
-    let cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions;
     var geometry = new THREE.PlaneGeometry( cellSideLen, cellSideLen, 32 );
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
     plane = new THREE.Mesh( geometry, material );
@@ -226,13 +237,13 @@ function updateWorldSize(){
     var material = new THREE.MeshBasicMaterial( {color: 0x00ffff, side: THREE.DoubleSide, opacity:0} );
     material.transparent = true;
     wholePlane = new THREE.Mesh( geometry, material );
-    wholePlane.position.set(0,CONFIG.PLAYGROUND.groundLevel,0);
+    wholePlane.position.set(sub,CONFIG.PLAYGROUND.groundLevel,sub);
     wholePlane.rotation.x = Math.PI / 2;
 
     scene.add( wholePlane );
 
     // Add walls BEGIN
-    let wallHeight = CONFIG.PLAYGROUND.wallHeight
+    let wallHeight = CONFIG.PLAYGROUND.wallHeight;
     let wallGeometry = new THREE.PlaneGeometry( CONFIG.PLAYGROUND.size, wallHeight, 32 );
     let wallMaterial = new THREE.MeshBasicMaterial( {color: 0xcccccc, side: THREE.DoubleSide, opacity: 0.8} );
     let wallShadowMaterial = new THREE.ShadowMaterial()
@@ -241,8 +252,8 @@ function updateWorldSize(){
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge
-    wall1.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10);
-    wall1shadow.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10);
+    wall1.position.set(sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10 + sub);
+    wall1shadow.position.set(sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10 + sub);
     // wholePlane.rotation.x = Math.PI / 2;
     wall1shadow.castShadow = true;
     wall1shadow.receiveShadow = true;
@@ -260,11 +271,30 @@ function updateWorldSize(){
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-0.1,wallHeight/2,0);
-    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-10,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,0);
-    wall2.position.set(-CONFIG.PLAYGROUND.size/2-10,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,0);
+    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-10+sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,sub);
+    wall2.position.set(-CONFIG.PLAYGROUND.size/2-10+sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,sub);
 
     scene.add( wall2 );
     scene.add( wall2shadow );
     // Add walls END
+
+    //Create a DirectionalLight and turn on shadows for the light
+    wall2Light = new THREE.DirectionalLight( 0xff0000, 0, 100 );
+    wall2Light.position.set( CONFIG.PLAYGROUND.size, 0, 0 ); 			//default; light shining from top
+    wall2Light.castShadow = true;            // default false
+    //Set up shadow properties for the light
+    wall2Light.shadow.mapSize.width = 5120;  // default
+    wall2Light.shadow.mapSize.height = 5120; // default
+    wall2Light.shadow.camera.near = 0.5;    // default
+    wall2Light.shadow.camera.left = -CONFIG.PLAYGROUND.size/2 + sub;
+    wall2Light.shadow.camera.right = CONFIG.PLAYGROUND.size/2 + sub;
+    wall2Light.shadow.camera.top = wallHeight+CONFIG.PLAYGROUND.groundLevel;
+    wall2Light.shadow.camera.bottom = CONFIG.PLAYGROUND.groundLevel;
+    wall2Light.shadow.camera.far = CONFIG.PLAYGROUND.size*2;
+
+    scene.add( wall2Light );
+    wall1Light = wall2Light.clone();
+    wall1Light.position.set(0, 0, CONFIG.PLAYGROUND.size); 			//default; light shining from top
+    scene.add( wall1Light );
 
 }
