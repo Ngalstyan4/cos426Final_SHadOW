@@ -188,6 +188,14 @@ function render() {
             y -= CONFIG.PLAYGROUND.groundLevel;
 
             if (intersects[0].object !== wholePlane){
+
+                if(del_cube) {
+                    console.log(intersects, intersectArray, intersectArray.indexOf(intersects[0].object));
+                    scene.remove(intersects[0].object);
+                    meshes = meshes.filter(o => o !==intersects[0].object);
+                    click = false;
+                    return;
+                }
                 var normal = intersects[0].face.normal.normalize();
                 if (normal.equals(new THREE.Vector3(0,1,0)) || normal.equals(new THREE.Vector3(0,-1,0))){
                     x =  Math.sign(x) * (Math.abs(x) - Math.abs(x) % cellSideLen+cellSideLen/2);
@@ -218,6 +226,7 @@ function render() {
                 }
             }
             else{
+                if(del_cube) return;
                 x =  Math.sign(x) * (Math.abs(x) - Math.abs(x) % cellSideLen+cellSideLen/2);
                 y = y + cellSideLen/2;
                 z =  Math.sign(z) * (Math.abs(z) - Math.abs(z) % cellSideLen+cellSideLen/2);
