@@ -33,6 +33,7 @@ function initGui() {
                     sceneDebugElems.forEach(e => scene.add(e));
                 else
                     sceneDebugElems.forEach(e => scene.remove(e));
+
             })
         .listen();
         let cameraControls = gui.addFolder("Camera");
@@ -43,7 +44,7 @@ function initGui() {
         cameraControls.add(guiControls.camera, "z").step(0.001).name("Camera Z").listen();
 
         
-        gui.add(reader, 'filename', [ 'none', '2-3', 'House-Duck' ] );
+        gui.add(reader, 'filename', [ 'none', '2-3', 'House-Duck' ] ).listen();
         gui.add(reader, 'changeLevel');
 
 

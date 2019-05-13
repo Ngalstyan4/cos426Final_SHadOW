@@ -21,9 +21,9 @@ function initWorld() {
 
     // Let there be someone to confirm there is Light !
     camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight,1, 10000);
-    camera.position.x = 1690;
-    camera.position.y = 1220
-    camera.position.z = 704;
+    camera.position.x = 4447.902;
+    camera.position.y = 2707.858
+    camera.position.z = 2980.549;
     camera.lookAt(new THREE.Vector3(0,400,0))
     scene.add(camera);
 

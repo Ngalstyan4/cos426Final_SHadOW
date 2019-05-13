@@ -1,7 +1,7 @@
 "use strict"
 var CONFIG =
 {
-    DEBUG: true,
+    DEBUG: false,
     HELPER_STRUCTS: {
         wall1camera:false,
         wall2camera:false
