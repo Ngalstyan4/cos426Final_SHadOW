@@ -43,15 +43,15 @@ function initGui() {
         cameraControls.add(guiControls.camera, "z").step(0.001).name("Camera Z").listen();
 
         
-        gui.add(reader, 'filename', [ 'none', 'line', '2-3', '2-5', 'tensorflow', 'CHALLENGE', 'House-Duck' ] ).name("CHOOSE LEVEL").
+        gui.add(reader, 'filename', [ 'none', 'line', '2-3', '2-5', 'tensorflow', 'CHALLENGE', 'House-Duck'] ).name("CHOOSE LEVEL").
         onChange(v => {
             setLevel(v + ".txt")
-            if (v == "House-Duck") {
-                $('#exampleModalLabel').text("Tadaaaaam");
-                $('.modal-body').html("<p>We actually have not been able to create this</p> <p>If you know how, or if you have other level ideas, let us know <a href='https://forms.gle/Zjo4zGi1SFiV4siv6'>here</a></p>");
-                $('#gameModal').modal('show');
+            // if (v == "House-Duck") {
+            //     $('#exampleModalLabel').text("Tadaaaaam");
+            //     $('.modal-body').html("<p>We actually have not been able to create this</p> <p>If you know how, or if you have other level ideas, let us know <a href='https://forms.gle/Zjo4zGi1SFiV4siv6'>here</a></p>");
+            //     $('#gameModal').modal('show');
                 
-            }
+            // }
     })
         .listen();
         // gui.add(reader, 'changeLevel');
