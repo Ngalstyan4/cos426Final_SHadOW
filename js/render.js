@@ -78,7 +78,7 @@ function addGoal(targets){
         for (var j=0; j< targets[0][i].length; j++){
             if (targets[0][i][j]===true){
                 var geometry = new THREE.PlaneGeometry( cellSideLen, cellSideLen, 32 );
-                var material = new THREE.MeshNormalMaterial();
+                var material = new THREE.MeshNormalMaterial({transparent:true, opacity: 0.8});
                 var shadowMaterial = new THREE.ShadowMaterial();
                 shadowMaterial.opacity = 0.3;
                 var goalPlane = new THREE.Mesh( geometry, material );
@@ -98,8 +98,8 @@ function addGoal(targets){
 
             if (targets[1][i][j]===true){
                 var geometry = new THREE.PlaneGeometry( cellSideLen, cellSideLen, 32 );
-                var material = new THREE.MeshNormalMaterial();
-                var shadowMaterial = new THREE.ShadowMaterial();
+                var material = new THREE.MeshNormalMaterial({transparent:true, opacity: 0.8});
+                var shadowMaterial = new THREE.ShadowMaterial({transparent:true});
                 shadowMaterial.opacity = 0.3;
                 var goalPlane = new THREE.Mesh( geometry, material );
                 var goalPlaneShadow = new THREE.Mesh(geometry, shadowMaterial);
