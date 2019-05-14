@@ -15,7 +15,7 @@ var walls = new Array(2);
 
 
 // Objects to update reference
-var wall1, wall1shadow, wall2,wall2shadow, wall1Light, wall2Light;
+var wall1Front, wall1Back, wall1shadow, wall2Front, wall2Back, wall2shadow, wall1Light, wall2Light;
 
 function initWorld() {
 
@@ -118,11 +118,12 @@ function initWorld() {
     let wallGeometry = new THREE.PlaneGeometry( CONFIG.PLAYGROUND.size, wallHeight, 32 );
     let wallFrontMaterial = new THREE.MeshBasicMaterial( {map: loader.load('assets/textures/wall.bmp'), side: THREE.FrontSide} );
     let wallBackMaterial = new THREE.MeshBasicMaterial( {map: loader.load('assets/textures/wall.bmp'), side: THREE.BackSide,transparent:true, opacity:0.3} );
-    let wallShadowMaterial = new THREE.ShadowMaterial()
-    let wall1Front = new THREE.Mesh( wallGeometry, wallFrontMaterial );
-    let wall1Back = new THREE.Mesh( wallGeometry, wallBackMaterial );
+    let wallShadowMaterial = new THREE.ShadowMaterial({transparent: true, opacity : 0.5 });
+    wallShadowMaterial.opacity = 0.5;
+    wall1Front = new THREE.Mesh( wallGeometry, wallFrontMaterial );
+    wall1Back = new THREE.Mesh( wallGeometry, wallBackMaterial );
 
-    let wall1shadow = new THREE.Mesh( wallGeometry, wallShadowMaterial );
+    wall1shadow = new THREE.Mesh( wallGeometry, wallShadowMaterial );
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge
@@ -151,8 +152,12 @@ function initWorld() {
     renderer.shadowMapWidth = 1024;
     renderer.shadowMapHeight = 1024;
 
-   let wall2 = wall1Front.clone();
-   wall2.rotation.y = Math.PI / 2;
+   wall2Front = wall1Front.clone();
+   wall2Back = wall1Back.clone();
+
+   wall2Front.rotation.y = Math.PI / 2;
+   wall2Back.rotation.y = Math.PI / 2;
+
 
    wall2shadow = new THREE.Mesh( wallGeometry, wallShadowMaterial );
    wall2shadow.castShadow = true;
@@ -162,9 +167,12 @@ function initWorld() {
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-0.1,wallHeight/2,0);
     wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-10,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,0);
-    wall2.position.set(-CONFIG.PLAYGROUND.size/2-10,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,0);
+    wall2Front.position.set(-CONFIG.PLAYGROUND.size/2-10,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,0);
+    wall2Back.position.set(-CONFIG.PLAYGROUND.size/2-10,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,0);
 
-    scene.add( wall2 );
+    scene.add( wall2Front );
+    scene.add( wall2Back );
+
     scene.add( wall2shadow );
     // Add walls END
 
@@ -236,25 +244,32 @@ function updateWorldSize(){
     // Add walls BEGIN
     let wallHeight = CONFIG.PLAYGROUND.wallHeight;
     let wallGeometry = new THREE.PlaneGeometry( CONFIG.PLAYGROUND.size, wallHeight, 32 );
-    wall1.geometry = wallGeometry;
+    wall1Front.geometry = wallGeometry;
+    wall1Back.geometry = wallGeometry;
+
     wall1shadow.geometry = wallGeometry;
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge
-    wall1.position.set(sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10 + sub);
+    wall1Front.position.set(sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10 + sub);
+    wall1Back.position.set(sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10 + sub);
+
     wall1shadow.position.set(sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10 + sub);
     // wholePlane.rotation.x = Math.PI / 2;
 
-    wall2.geometry = wallGeometry;
+    wall2Front.geometry = wallGeometry;
+    wall2Back.geometry = wallGeometry;
+
     wall2shadow.geometry = wallGeometry;
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-0.1,wallHeight/2,0);
     wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-10+sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,sub);
-    wall2.position.set(-CONFIG.PLAYGROUND.size/2-10+sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,sub);
+    wall2Front.position.set(-CONFIG.PLAYGROUND.size/2-10+sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,sub);
+    wall2Back.position.set(-CONFIG.PLAYGROUND.size/2-10+sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,sub);
 
-    scene.add( wall2 );
-    scene.add( wall2shadow );
+    // scene.add( wall2 );
+    // scene.add( wall2shadow );
     // Add walls END
 
     //Create a DirectionalLight and turn on shadows for the light
