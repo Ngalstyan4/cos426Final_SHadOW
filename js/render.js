@@ -72,6 +72,25 @@ function checkWinCondition(){
     win = true;
 }
 
+function checkValidBlock(block){
+    var cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions;
+    var sub = 0;
+    if (CONFIG.PLAYGROUND.divisions % 2 == 1){
+        sub = 0.5;
+    }
+
+    var vec = block.position;
+    var shadowX = Math.round((vec.x + CONFIG.PLAYGROUND.size/2)/cellSideLen-0.5+sub);
+    var shadowY = Math.round((vec.y-CONFIG.PLAYGROUND.groundLevel) / cellSideLen-0.5);
+    var shadowZ = Math.round((vec.z + CONFIG.PLAYGROUND.size/2)/cellSideLen-0.5+sub);
+
+    if (shadowX<0 || shadowZ<0 || shadowY<0)
+        return false;
+    if (shadowX>=CONFIG.PLAYGROUND.divisions || shadowY>=CONFIG.PLAYGROUND.height || shadowZ>=CONFIG.PLAYGROUND.divisions)
+        return false;
+    return true;
+}
+
 function addGoal(targets){
     var cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions;
     var sub = 0;
@@ -311,18 +330,24 @@ function render() {
             y += CONFIG.PLAYGROUND.groundLevel;
             cube.position.set(x,y,z);
 
-            geometry = new THREE.BoxGeometry( cellSideLen, cellSideLen, cellSideLen );
-            geometry.translate(x,y,z);
-            // wireframe
-            var geo = new THREE.EdgesGeometry( geometry );
-            var mat = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 16 } );
-            var wireframe = { shape: new THREE.LineSegments( geo, mat ) , box: cube.position};
-            wireframe.shape.renderOrder = 1; // make sure wireframes are rendered 2nd
-            scene.add( wireframe.shape );
-            borders.push(wireframe);
+            if (checkValidBlock(cube)){
+                geometry = new THREE.BoxGeometry( cellSideLen, cellSideLen, cellSideLen );
+                geometry.translate(x,y,z);
+                // wireframe
+                var geo = new THREE.EdgesGeometry( geometry );
+                var mat = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 16 } );
+                var wireframe = { shape: new THREE.LineSegments( geo, mat ) , box: cube.position};
+                wireframe.shape.renderOrder = 1; // make sure wireframes are rendered 2nd
+                scene.add( wireframe.shape );
+                borders.push(wireframe);
 
-            if (game){
-                checkWinCondition();
+                if (game){
+                    checkWinCondition();
+                }
+            }
+            else{
+                scene.remove(cube);
+                meshes = meshes.filter(o => o !==cube);
             }
         }
         click = false;
