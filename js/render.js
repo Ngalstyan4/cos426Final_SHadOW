@@ -13,7 +13,6 @@ var blockColor = new THREE.Color(0,0,0);
 function deleteBlocks(){
     for (var i = 0; i<meshes.length;i++){
         scene.remove(meshes[i]);
-        meshes[i].dispose();
     }
     meshes = [];
 }
@@ -21,7 +20,6 @@ function deleteBlocks(){
 function deleteGoal(){
     for (var i = 0; i<goal.length;i++){
         scene.remove(goal[i]);
-        scene.dispose();
     }
     goal = [];
 }

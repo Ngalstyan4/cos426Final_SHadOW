@@ -48,7 +48,7 @@ function initGui() {
         cameraControls.add(guiControls.camera, "z").step(0.001).name("Camera Z").listen();
 
         let sizeControl = gui.addFolder("Size");
-        sizeControl.add(guiControls, "gridSize", 6, 12)
+        sizeControl.add(guiControls, "gridSize", 5, 25)
             .step(1)
             .name("Grid Size")
             .onChange(function(value) {
@@ -66,7 +66,7 @@ function initGui() {
                 updateWorldSize();
             });
 
-        sizeControl.add(guiControls, "height", 6, 12)
+        sizeControl.add(guiControls, "height", 4, 20)
             .step(1)
             .name("Height")
             .onChange(function(value) {
@@ -145,6 +145,36 @@ function initGui() {
 }
 
 function saveLevel() {
+    var walls = new Array(2);
+    for (var r = 0; r<2; r++){
+        walls[r] = new Array(CONFIG.PLAYGROUND.height);
+        for (var i = 0; i< CONFIG.PLAYGROUND.height; i++){
+            walls[r][i] = new Array(CONFIG.PLAYGROUND.divisions);
+            for (var j = 0; j< CONFIG.PLAYGROUND.divisions; j++){
+                walls[r][i][j] = false;
+            }
+        }
+    }
+
+    for (var i = 0; i< meshes.length; i++){
+        var cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions;
+        var sub = 0;
+        if (CONFIG.PLAYGROUND.divisions % 2 == 1){
+            sub = 0.5;
+        }
+
+        var vec = meshes[i].position;
+        var shadowX = Math.round((vec.x + CONFIG.PLAYGROUND.size/2)/cellSideLen-0.5+sub);
+        var shadowY = Math.round((vec.y-CONFIG.PLAYGROUND.groundLevel) / cellSideLen-0.5);
+        var shadowZ = Math.round((vec.z + CONFIG.PLAYGROUND.size/2)/cellSideLen-0.5+sub);
+
+        if (shadowX >=0 && shadowX < walls[0][0].length && shadowY >=0 && shadowY < walls[0].length)       
+            walls[0][shadowY][shadowX]= true;
+        if (shadowZ >=0 && shadowZ < walls[0][0].length && shadowY >=0 && shadowY < walls[0].length)  
+            walls[1][shadowY][shadowZ]= true;
+    }
+
+
     let res = walls[0].reverse().map(wall => wall.map(a => a? "X":".").reduce((a,b) => a + " " + b )).reduce((a,b) => a+"\n"+b);
     res += "\n\n";
     res += walls[1].reverse().map(wall => wall.reverse().map(a => a? "X":".").reduce((a,b) => a + " " + b )).reduce((a,b) => a+"\n"+b);
