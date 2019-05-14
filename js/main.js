@@ -4,8 +4,8 @@ var game = false;
 var target = new Array(2);
 
 
-var nextDivision = 6;
-var nextHeight = 6;
+var nextDivision = CONFIG.PLAYGROUND.divisions;
+var nextHeight = 5;
 
 function setLevel(fileName){
     var loader = new THREE.FileLoader();

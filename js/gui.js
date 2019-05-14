@@ -22,7 +22,7 @@ function initGui() {
             this.blockColor = new THREE.Color();
             this.newLevel = ""
             this.gridSize = CONFIG.PLAYGROUND.divisions;
-            this.height = CONFIG.PLAYGROUND.height;
+            this.height = nextHeight;
         })();
 
         // GUI elements
@@ -93,7 +93,7 @@ function initGui() {
         .addColor(guiControls, "blockColor")
         .name("Block Color")
         .onChange(function(value) {
-            blockColor.setRGB(value.r/255, value.g/255, value.b/255);
+            blockColor.setRGB(value.r/256, value.g/256, value.b/256);
         });
 
         

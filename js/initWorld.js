@@ -15,7 +15,7 @@ var walls = new Array(2);
 
 
 // Objects to update reference
-var wall1Front, wall1Back, wall1shadow, wall2Front, wall2Back, wall2shadow, wall1Light, wall2Light;
+var wall1Front, wall1Back, wall1shadow, wall2Front, wall2Back, wall2shadow, wall1Light, wall2Light, wall1CameraHelper, wall2CameraHelper;
 
 function initWorld() {
 
@@ -114,7 +114,7 @@ function initWorld() {
     scene.add( wholePlane );
 
     // Add walls BEGIN
-    let wallHeight = CONFIG.PLAYGROUND.wallHeight
+    let wallHeight = CONFIG.PLAYGROUND.wallHeight;
     let wallGeometry = new THREE.PlaneGeometry( CONFIG.PLAYGROUND.size, wallHeight, 32 );
     let wallFrontMaterial = new THREE.MeshBasicMaterial( {map: loader.load('assets/textures/wall.bmp'), side: THREE.FrontSide} );
     let wallBackMaterial = new THREE.MeshBasicMaterial( {map: loader.load('assets/textures/wall.bmp'), side: THREE.BackSide,transparent:true, opacity:0.3} );
@@ -122,14 +122,12 @@ function initWorld() {
     wallShadowMaterial.opacity = 0.5;
     wall1Front = new THREE.Mesh( wallGeometry, wallFrontMaterial );
     wall1Back = new THREE.Mesh( wallGeometry, wallBackMaterial );
-
     wall1shadow = new THREE.Mesh( wallGeometry, wallShadowMaterial );
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge
     wall1Front.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10);
     wall1Back.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10);
-
     wall1shadow.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10);
     // wholePlane.rotation.x = Math.PI / 2;
     wall1shadow.castShadow = true;
@@ -137,7 +135,6 @@ function initWorld() {
 
     scene.add( wall1Front );
     scene.add( wall1Back );
-
     scene.add( wall1shadow );
 
     renderer.shadowMapSoft = true;
@@ -198,18 +195,16 @@ function initWorld() {
     scene.add( wall1Light );
 
     if (CONFIG.HELPER_STRUCTS.wall1camera) {
-        let wall1CameraHelper = new THREE.CameraHelper( wall1Light.shadow.camera );
+        wall1CameraHelper = new THREE.CameraHelper( wall1Light.shadow.camera );
         scene.add(wall1CameraHelper);
     }
 
     if (CONFIG.HELPER_STRUCTS.wall2camera) {
-        let wall2CameraHelper = new THREE.CameraHelper( wall2Light.shadow.camera );
+        wall2CameraHelper = new THREE.CameraHelper( wall2Light.shadow.camera );
         scene.add(wall2CameraHelper);
     }
 
     // Add lights towards the walls END
-
-
 
     raycaster = new THREE.Raycaster();
 }
@@ -246,20 +241,17 @@ function updateWorldSize(){
     let wallGeometry = new THREE.PlaneGeometry( CONFIG.PLAYGROUND.size, wallHeight, 32 );
     wall1Front.geometry = wallGeometry;
     wall1Back.geometry = wallGeometry;
-
     wall1shadow.geometry = wallGeometry;
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge
     wall1Front.position.set(sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10 + sub);
     wall1Back.position.set(sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10 + sub);
-
     wall1shadow.position.set(sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10 + sub);
     // wholePlane.rotation.x = Math.PI / 2;
 
     wall2Front.geometry = wallGeometry;
     wall2Back.geometry = wallGeometry;
-
     wall2shadow.geometry = wallGeometry;
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
