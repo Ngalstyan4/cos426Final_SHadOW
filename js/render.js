@@ -6,6 +6,7 @@ var meshes = [];
 var goal = [];
 var borders = [];
 var win = false;
+var constrain = true;
 
 var type = 0;
 
@@ -70,6 +71,22 @@ function checkWinCondition(){
     }
 
     win = true;
+}
+
+function notBehindWalls(block){
+    var cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions;
+    var sub = 0;
+    if (CONFIG.PLAYGROUND.divisions % 2 == 1){
+        sub = 0.5;
+    }
+
+    var vec = block.position;
+    var shadowX = Math.round((vec.x + CONFIG.PLAYGROUND.size/2)/cellSideLen-0.5+sub);
+    var shadowZ = Math.round((vec.z + CONFIG.PLAYGROUND.size/2)/cellSideLen-0.5+sub);
+
+    if (shadowX<0 || shadowZ<0)
+        return false;
+    return true;
 }
 
 function checkValidBlock(block){
@@ -264,7 +281,7 @@ function render() {
                     meshes = meshes.filter(o => o !==intersects[0].object);
 
                     if (game)
-                        heckWinCondition();
+                        checkWinCondition();
                     click = false;
                     return;
                 }
@@ -330,7 +347,7 @@ function render() {
             y += CONFIG.PLAYGROUND.groundLevel;
             cube.position.set(x,y,z);
 
-            if (checkValidBlock(cube)){
+            if (notBehindWalls(cube) && (checkValidBlock(cube) || !constrain)){
                 geometry = new THREE.BoxGeometry( cellSideLen, cellSideLen, cellSideLen );
                 geometry.translate(x,y,z);
                 // wireframe

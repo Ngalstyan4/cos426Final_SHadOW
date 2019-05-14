@@ -5,7 +5,7 @@ var target = new Array(2);
 
 
 var nextDivision = CONFIG.PLAYGROUND.divisions;
-var nextHeight = 5;
+var nextHeight = 7;
 
 function setLevel(fileName){
     var loader = new THREE.FileLoader();
@@ -80,6 +80,9 @@ function setLevel(fileName){
         // onError callback
         function ( err ) {
             console.error( 'An error happened' );
+            $('#exampleModalLabel').text("We are sorry!");
+            $('.modal-body').html("<p>We actually have not been able to create this</p> <p>If you know how, or if you have other level ideas, let us know <a href='https://forms.gle/Zjo4zGi1SFiV4siv6'>here</a></p>");
+            $('#gameModal').modal('show');
         }
     );
 }

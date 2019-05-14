@@ -98,7 +98,7 @@ function initWorld() {
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
     plane = new THREE.Mesh( geometry, material );
     plane.position.set(cellSideLen/2, CONFIG.PLAYGROUND.groundLevel, cellSideLen/2);
-    plane.rotation.x = Math.PI;
+    plane.rotation.x = Math.PI/2;
     plane.castShadow = true;
     plane.receiveShadow = true;
     scene.add( plane );

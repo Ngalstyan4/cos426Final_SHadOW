@@ -1,0 +1,171 @@
+<head>
+    <title> COS426 Final Project SHadOW! &mdash; Project Report</title>
+    <link href="css/style.css" type="text/css" rel="stylesheet"/>
+</head>
+
+<body>
+<script src="js/student.js"> </script>
+<script src="js/writeup.js"> </script>
+<div class="top">
+<div class="main_div">
+
+<h1> <div class=assignment>COS426 Final Project</div> SHadOW! &mdash; Project Report</h1>
+<h2>Switch to: <a href='index.html'>Game</a></h2>
+<div class='selectable'>
+<h2 id='student'></h2>
+
+<ul>
+<li><a href='#goal'>Goal</a></li>
+<li><a href='#previous'>Previous Work</a></li>
+<li><a href='#approach'>Approach</a></li>
+<li><a href='#methodology'>Methodology</a></li>
+<li><a href='#results'>Results</a></li>
+<li><a href='#discussion'>Discussion</a></li>
+<li><a href='#conclusion'>Conclusion</a></li>
+<li><a href='#acknowledgements'>Acknowledgements</a></li>
+</ul></div>
+
+<p><hr><p><a name='goal'></a><h2>Goal</h2><p><hr><p>
+
+Starting off, we knew we wanted to work with shadows so we started brainstorming around different game ideas that involved shadows. Inspired on the game Shadowmatic,
+we decided to build a game with a simpler form of shapes (blocks).
+
+<h3>What did we try to do</h3>
+We built a 3D game where the goal is to build a 3D object that casts a predetermined shadow. It is trivially easy to go the other way round: given 3D object,
+predict its shadows. However, We felt the opposite of the problem is just hard enough that it lies on that perfect game difficulty curve. Having built the game, we think this
+intuition was correct as the game has been quite amusing and absorbing for us and for others we asked to play.
+
+<h3>Who would benefit?</h3>
+The game is not meant to be played for hours. It is a nice little fidgeting tool for college students, adults and anyone else who want to spend their breaks solving a
+small interesting puzzle in a visually pleasing environment.
+
+<p><hr><p><a name='previous'></a><h2>Previous Work</h2><p><hr><p></p>
+<h3>What related work have other people done?</h3>
+
+Shadowmatic is the game we took the greatest inspiration from. It presents the player with a set of objects that initially do not look like anything but if viewed from correct direction,
+this suddenly changes.
+<br>
+We also took some ideas from Monument Valley game when designing our levels. This game offers a great diversity of block-structured game levels.
+
+<br><br><img src='results/shadowmatic.png'><br>
+
+<h3>When do previous approaches fail/succeed?</h3>
+Although our approach is inspired by that of Shadowmatic, there is little in common in our final result and in that of Shadowmatic. So it is hard to argue that we
+built off of their approach and that they fail/succeed at anything in particular. 
+
+<p><hr><p><a name='approach'></a><h2>Approach</h2><p><hr><p></p>
+<h3>What approach did we try?</h3>
+We built a 3D game environment that in the barebones consists of a grid floor, and 2 walls (and a lot of invisible stuff some of which you can learn about in the Appendix or can look at our code).
+<br>
+In the game the player primarily navigates using mouse movements, mouse clicks. Mouse click and drags provide an intuitive interface for changing viewpoint in the game. Mouse clicks on the two
+dimensional floor add cubes at the click location. Two light sources parallel to two walls and infinitely far from them cast the shadows of the blocks on side walls. The goal is to place
+these blocks such that they cast a shadow that is color-outlined on the walls already. Each level of the game consists of one such outline on the walls ranging from trivial to quite challenging.
+
+<br><br><img src='results/mousemove.gif'><br>
+
+<h3>Under what circumstances do we think it should work well?</h3>
+This game we think works best when directly appealing to the creativity of the user. There are multiple solutions to a single shadow game, and our cube editor has various block options
+to which to choose from. We can imagine this as a game of sharing as well, where the solutions to a puzzle, or more complicated levels, can be shared with other users.
+
+<p><hr><p><a name='methodology'></a><h2>Methodology</h2><p><hr><p></p>
+<h3>What pieces had to be implemented to execute our approach?</h3>
+Below we present a subset of elements that we had to implement to make this game a reality. We tried to include most interesting examples and did not list all of them for the interest of
+space.
+
+<h3>Initial World</h3>
+We set up our initial world with all the visible elements in addition to several hidden components. Such hidden components include: Additional floor plane, cameras, shadows lights, hidden html
+windows, etc.
+<br>
+Two particular implementation details that are worth mentioning are sidewall and floor geometries. The visible floor consists of a grid which made it impossible to do appropriate raycasting
+so we could detect which square the mouse is on. To solve this at the location of the floor grid we also added a transparent plane and looked for intersections with this plane during raycasting.
+<br>
+When working on the sidewalls, we realized that sometimes it is difficult to put blocks close to the sidewall when there are other existing blocks obscuring the view. Therefore,
+instead of a solid wall, we created two walls per visible wall. Both are single sided walls and therefore can take different threejs opacity values. We used this trick to make the wall
+half transparent when viewed from behind.
+
+<br><br><img src='results/transparent_wall.png'><br>
+
+<h3>Rendering</h3>
+Rendering cubes in correct locations with correct parameters was quite hard and tedious. This became even harder when considering possible changes of grid sizes. We settled by setting our own
+version of a coordinate system that we rescaled appropriately according to the grid size. Then, we figured out, for each cube added, what is the correct “voxel” that it should occupy.
+Adding to this difficulty was then adding the selection shape on the cubes and the borders around it. We did this by working the position and rotation based on that of the targeted object.
+<br>
+Another interesting challenge that had to be addressed here was the difficulty of differentiating a click from a drag. In Javascript there is no drag event and a drag is just a *mousedown*
+followed by *mousemove*. We wanted not to have separate controls for both as computer users are used to using clicks and drags interchangeable. That is why we implemented a series of event
+handlers that executed a state machine correctly ending in *clicked* or *dragged* states when respective actions got triggered by the user.
+
+<h3>Levels</h3>
+To implement levels, we had to make sure that the user knew exactly what kind of shadow they had to target on the wall. Naturally, we needed to do this in a way that they could see what parts
+of the shadow they had and which ones they did not. We settled then in setting semi-transparent planes in the wall marking the locations of the shadows. Then, the projection of the shadows
+would naturally show them the completion of the level.
+
+<br><br><img src='results/targets.png'><br>
+<br>
+In order to set up a level, we created several text files that mark in the rectangle wall grid, which ones form the shape in each wall. Then, it was just a matter of position the planes in
+the wall in that same shape. To do this, we used the projection of the block coordinates (the ones we used earlier) into the wall.
+
+<h3>Winning Conditions</h3>
+While the visualization of the level followed easily from the object positioning and the lightning, we had to make sure that we could determine if the player has won (or not) the current
+level. To do this, whenever a cube was added or removed, we reverted to the coordinates in number of cubes, projected that into the 2D coordinates represented by each wall, and then
+compared that with the coordinates determined by the level file. On a complete match, we showed the user a win message and animation.
+
+<h3>Miscellany</h3>
+<h4>Level Generator</h4>
+We added a GUI element that helps save arbitrary shapes that the player creates on the playground in our internal level format. So, our fans can just incarnate any game levels bounded only
+by their imagination (and maximum playground resolution) seamlessly share these levels with us and have us include them as permanent game levels.
+
+<br><br><img src='results/saved-level.png'><br>
+
+<h4>Win Animation</h4>
+When the player completed the game, we wanted to really celebrate their achievement. An alert of “You won!” would not cut it. So, we integrated Tween library to automatically move the
+camera into wall-parallel views so the player could see that they really did quite some work and their piece matches both shadows.
+
+<br><br><img src='results/win-transition.gif'><br>
+
+<p><hr><p><a name='results'></a><h2>Results</h2><p><hr><p></p>
+We asked many of our friends to play the game and game and give us feedback. Some of the features such as saving levels, adding instructions explaining how to play, adding functionality to
+delete blocks were implemented upon their request. Most of the people that we asked to play our game, not only asked for the public URL to be able to play later, but also asked for the Graphics
+course website to take a look and potentially take the course in the future.
+<br>
+It was very useful to have a simple working prototype early on because it allowed us to continually get feedback as we went on. One feature we got asked for a lot was the ability to save
+progress. This, however, would require a backend with user credentials and game state storage, which we did not have time to put together.
+
+<p><hr><p><a name='discussion'></a><h2>Discussion</h2><p><hr><p></p>
+<h3>Overall, is the approach we took promising?</h3>
+We think the approach and overall idea is very promising and three.js was just the right tool to write it in. Although as the game progresses, a loud PC fan is unavoidable, given the
+implementation in Javascript, we think three.js was a good choice of environment and we can perhaps optimize it further to use less resources.
+
+<h3>What different approach or variant of this approach is better?</h3>
+There is no game feature in the game that we would implement differently. There however are some features that would enable better user experience and more complex levels. For example,
+in large levels such as ”Heart-Diamond” it may be tedious to click for every box as the level requires a lot of boxes. So, we could add a functionality thereby the player could indicate the
+location of the initial block and drag to automatically fill the rest.
+
+<h3>What follow-up work should be done next?</h3>
+An immediate next step, which we would have done, had it not been the Dean’s date, would be to add a backend. This would enable a range of possibilities and make the game more production ready.
+We could even make the game multiplayer where participants could compete based on number of blocks and the speed of completion in a given level.
+<br>
+We would like to also experiment with a 3-wall version of the game. The shadow space is still greatly underconstrained and there are several solutions to many levels. 3-wall version would
+additionally have a wall in the ceiling with an appropriate light to project shadows on the wall. Then a level would be specified by three projected shadows thereby making the challenge
+strictly more difficult.
+
+<h3>What did we learn by doing this project?</h3>
+We learned a lot about the underlying mechanics of rendering pipeline. Assignments were not really good at making this clear as most of infrastructure work was already done for us, but the
+final project was a great way to do all the plumbing with our own hands and learn how that is done as well. We also learned a lot about three.js, its features and the community around it.
+We were amazed how good the framework was for expressing our ideas in!
+<br>
+This project was also a great exercise of iterative design and implementation. We learned how to incorporate feedback, how to critically evaluate our project, catch inconvenient UX elements
+and develop appropriate fixes. 
+
+<p><hr><p><a name='conclusion'></a><h2>Conclusion</h2><p><hr><p></p>
+Building this game was a great experience for both of us. It was an experience of learning, effective collaboration, creativity and endless improvement. It was very helpful to have had the
+exposure to several three.js projects during the course as we knew how to set up the skeleton of the project so we would be most productive. Although the game still has a lot of rough edges,
+we are very happy we made it and may even try to permanently host it on the public domain if there is enough interest among the people who get to play it in the next couple of days.
+
+<p><hr><p><a name='acknowledgements'></a><h2>Acknowledgements</h2><p><hr><p></p>
+We would like to thank everyone who agreed to play with, and test earlier and waaaaay less fun versions of this game. You all provided very valuable feedback which made the game what it is now.
+<br> 
+We would also like to thank all of the course staff for feedback and for helping us learn valuable skills without which we could create anything close to what we have!
+</div>
+</div>
+</body>
+</html>

@@ -112,7 +112,7 @@ img {
     font-color:#FF0;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4 {
     font-weight: 700;
     margin: 0em 0em 0em;
     letter-spacing: 2px;
@@ -125,14 +125,23 @@ h1, h2, h3 {
 }
 
 h1 {
-    font-size: 100%;
+    font-size: 120%;
 }
 h2 {
     margin-top:10px;
-    font-size: 70%;
+    font-size: 100%;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 h3 {
+    font-size: 80%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+h4 {
     font-size: 60%;
+    margin-bottom: 20px;
 }
 
 a, a:visited, a:active {

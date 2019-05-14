@@ -23,6 +23,7 @@ function initGui() {
             this.newLevel = ""
             this.gridSize = CONFIG.PLAYGROUND.divisions;
             this.height = nextHeight;
+            this.constrainBlocks=true;
         })();
 
         // GUI elements
@@ -96,51 +97,19 @@ function initGui() {
             blockColor.setRGB(value.r/256, value.g/256, value.b/256);
         });
 
-        
-        gui.add(reader, 'filename', [ 'none', 'line', '2-3', '2-5', 'tensorflow', 'CHALLENGE', 'House-Duck', 'Heart-Diamond'] ).name("CHOOSE LEVEL").
+        let gameSettings = gui.addFolder("Game Settings");
+
+        gameSettings.add(reader, 'filename', [ 'none', 'line', '2-3', '2-5', 'tensorflow', 'CHALLENGE', 'House-Duck', 'Heart-Diamond'] ).name("CHOOSE LEVEL").
         onChange(v => {
             reader.filename = v;
             setLevel(v + ".txt")
-            // if (v == "House-Duck") {
-            //     $('#exampleModalLabel').text("Tadaaaaam");
-            //     $('.modal-body').html("<p>We actually have not been able to create this</p> <p>If you know how, or if you have other level ideas, let us know <a href='https://forms.gle/Zjo4zGi1SFiV4siv6'>here</a></p>");
-            //     $('#gameModal').modal('show');
-                
-            // }
-    })
-        .listen();
-        // gui.add(reader, 'changeLevel');
+        }).listen();
 
-
-
-        // let sizeControl = gui
-        //   .add(guiControls, "fabricLength", 200, 1000)
-        //   .step(20)
-        //   .name("Size")
-        //   .onChange(function(value) {
-        //     fabricLength = value;
-        //     xSegs = Math.round(value / 20);
-        //     ySegs = Math.round(value / 20);
-        //     restartCloth();
-        //   });
-
-
-        // interactionControls
-        //   .add(guiControls, "object", ["None", "Sphere", "Box", "Curved Floor"])
-        //   .name("object")
-        //   .onChange(function(value) {
-        //     placeObject(value);
-        //   });
-
-
-        // let appearanceControls = gui.addFolder("Appearance");
-        // appearanceControls
-        //   .addColor(guiControls, "clothColor")
-        //   .name("cloth color")
-        //   .onChange(function(value) {
-        //     clothMaterial.color.setHex(value);
-        //   });
-
+        gameSettings.add(guiControls, "constrainBlocks")
+        .name("Limit to Grid")
+        .onChange(function(value) {
+            constrain = value;
+        });
     }
 }
 
