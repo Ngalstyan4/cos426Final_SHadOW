@@ -11,6 +11,8 @@ var controls;
 var raycaster;
 var sceneDebugElems = [];
 var loader;
+var walls = new Array(2);
+
 
 // Objects to update reference
 var wall1, wall1shadow, wall2,wall2shadow, wall1Light, wall2Light;
@@ -114,20 +116,27 @@ function initWorld() {
     // Add walls BEGIN
     let wallHeight = CONFIG.PLAYGROUND.wallHeight
     let wallGeometry = new THREE.PlaneGeometry( CONFIG.PLAYGROUND.size, wallHeight, 32 );
-    let wallMaterial = new THREE.MeshBasicMaterial( {color: 0xcccccc, side: THREE.DoubleSide, opacity: 0.8} );
+    let wallFrontMaterial = new THREE.MeshBasicMaterial( {map: loader.load('assets/textures/wall.bmp'), side: THREE.FrontSide} );
+    let wallBackMaterial = new THREE.MeshBasicMaterial( {map: loader.load('assets/textures/wall.bmp'), side: THREE.BackSide,transparent:true, opacity:0.3} );
     let wallShadowMaterial = new THREE.ShadowMaterial()
-    wall1 = new THREE.Mesh( wallGeometry, wallMaterial );
-    wall1shadow = new THREE.Mesh( wallGeometry, wallShadowMaterial );
+    let wall1Front = new THREE.Mesh( wallGeometry, wallFrontMaterial );
+    let wall1Back = new THREE.Mesh( wallGeometry, wallBackMaterial );
+
+    let wall1shadow = new THREE.Mesh( wallGeometry, wallShadowMaterial );
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge
-    wall1.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10);
+    wall1Front.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10);
+    wall1Back.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10);
+
     wall1shadow.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10);
     // wholePlane.rotation.x = Math.PI / 2;
     wall1shadow.castShadow = true;
     wall1shadow.receiveShadow = true;
 
-    scene.add( wall1 );
+    scene.add( wall1Front );
+    scene.add( wall1Back );
+
     scene.add( wall1shadow );
 
     renderer.shadowMapSoft = true;
@@ -142,7 +151,7 @@ function initWorld() {
     renderer.shadowMapWidth = 1024;
     renderer.shadowMapHeight = 1024;
 
-   wall2 = wall1.clone();
+   let wall2 = wall1Front.clone();
    wall2.rotation.y = Math.PI / 2;
 
    wall2shadow = new THREE.Mesh( wallGeometry, wallShadowMaterial );
