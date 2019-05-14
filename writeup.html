@@ -12,7 +12,7 @@
 <h1> <div class=assignment>COS426 Final Project</div> SHadOW! &mdash; Project Report</h1>
 <h2>Switch to: <a href='index.html'>Game</a></h2>
 <div class='selectable'>
-<h2 id='student'></h2>
+<h2 id='student'>Garek Galstyan and Lucas F. Salvador</h2>
 
 <ul>
 <li><a href='#goal'>Goal</a></li>
@@ -47,7 +47,7 @@ this suddenly changes.
 <br>
 We also took some ideas from Monument Valley game when designing our levels. This game offers a great diversity of block-structured game levels.
 
-<br><br><img src='results/shadowmatic.png'><br>
+<br><br><img src='assets/results/shadowmatic.jpg'><br><br>
 
 <h3>When do previous approaches fail/succeed?</h3>
 Although our approach is inspired by that of Shadowmatic, there is little in common in our final result and in that of Shadowmatic. So it is hard to argue that we
@@ -61,7 +61,7 @@ In the game the player primarily navigates using mouse movements, mouse clicks. 
 dimensional floor add cubes at the click location. Two light sources parallel to two walls and infinitely far from them cast the shadows of the blocks on side walls. The goal is to place
 these blocks such that they cast a shadow that is color-outlined on the walls already. Each level of the game consists of one such outline on the walls ranging from trivial to quite challenging.
 
-<br><br><img src='results/mousemove.gif'><br>
+<br><br><img src='assets/results/mousemove.gif'><br><br>
 
 <h3>Under what circumstances do we think it should work well?</h3>
 This game we think works best when directly appealing to the creativity of the user. There are multiple solutions to a single shadow game, and our cube editor has various block options
@@ -83,7 +83,7 @@ When working on the sidewalls, we realized that sometimes it is difficult to put
 instead of a solid wall, we created two walls per visible wall. Both are single sided walls and therefore can take different threejs opacity values. We used this trick to make the wall
 half transparent when viewed from behind.
 
-<br><br><img src='results/transparent_wall.png'><br>
+<br><br><img src='assets/results/transparent-wall.jpg'><br><br>
 
 <h3>Rendering</h3>
 Rendering cubes in correct locations with correct parameters was quite hard and tedious. This became even harder when considering possible changes of grid sizes. We settled by setting our own
@@ -99,8 +99,8 @@ To implement levels, we had to make sure that the user knew exactly what kind of
 of the shadow they had and which ones they did not. We settled then in setting semi-transparent planes in the wall marking the locations of the shadows. Then, the projection of the shadows
 would naturally show them the completion of the level.
 
-<br><br><img src='results/targets.png'><br>
-<br>
+<br><br><img src='assets/results/targets.jpg'><br><br>
+
 In order to set up a level, we created several text files that mark in the rectangle wall grid, which ones form the shape in each wall. Then, it was just a matter of position the planes in
 the wall in that same shape. To do this, we used the projection of the block coordinates (the ones we used earlier) into the wall.
 
@@ -114,13 +114,14 @@ compared that with the coordinates determined by the level file. On a complete m
 We added a GUI element that helps save arbitrary shapes that the player creates on the playground in our internal level format. So, our fans can just incarnate any game levels bounded only
 by their imagination (and maximum playground resolution) seamlessly share these levels with us and have us include them as permanent game levels.
 
-<br><br><img src='results/saved-level.png'><br>
+<br><br><img src='assets/results/level-to-save.jpg'><br><br>
+<br><br><img src='assets/results/saved-level.png'><br><br>
 
 <h4>Win Animation</h4>
 When the player completed the game, we wanted to really celebrate their achievement. An alert of “You won!” would not cut it. So, we integrated Tween library to automatically move the
 camera into wall-parallel views so the player could see that they really did quite some work and their piece matches both shadows.
 
-<br><br><img src='results/win-transition.gif'><br>
+<br><br><img src='assets/results/win-transition.gif'><br><br>
 
 <p><hr><p><a name='results'></a><h2>Results</h2><p><hr><p></p>
 We asked many of our friends to play the game and game and give us feedback. Some of the features such as saving levels, adding instructions explaining how to play, adding functionality to
@@ -160,6 +161,10 @@ and develop appropriate fixes.
 Building this game was a great experience for both of us. It was an experience of learning, effective collaboration, creativity and endless improvement. It was very helpful to have had the
 exposure to several three.js projects during the course as we knew how to set up the skeleton of the project so we would be most productive. Although the game still has a lot of rough edges,
 we are very happy we made it and may even try to permanently host it on the public domain if there is enough interest among the people who get to play it in the next couple of days.
+
+<p><hr><p><a name='sources'></a><h2>Sources</h2><p><hr><p></p>
+
+We used the THREE.JS library when building this assignment, along with the skeleton code from Assignment 5. This writeup format is based on the one used for the course.
 
 <p><hr><p><a name='acknowledgements'></a><h2>Acknowledgements</h2><p><hr><p></p>
 We would like to thank everyone who agreed to play with, and test earlier and waaaaay less fun versions of this game. You all provided very valuable feedback which made the game what it is now.
