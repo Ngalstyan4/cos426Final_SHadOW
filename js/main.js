@@ -3,6 +3,10 @@
 var game = false;
 var target = new Array(2);
 
+
+var nextDivision = 6;
+var nextHeight = 6;
+
 function setLevel(fileName){
     var loader = new THREE.FileLoader();
 
@@ -10,6 +14,11 @@ function setLevel(fileName){
         // Delete block objects and resize
         deleteBlocks();
         deleteGoal();
+
+        CONFIG.PLAYGROUND.divisions = nextDivision;
+        CONFIG.PLAYGROUND.height = nextHeight;
+        CONFIG.PLAYGROUND.wallHeight = CONFIG.PLAYGROUND.size / nextDivision * nextHeight;
+        updateWorldSize();
 
         //set blank map and return
         game = false;
@@ -32,6 +41,7 @@ function setLevel(fileName){
             var height = parseInt(numbers[1]);
 
             CONFIG.PLAYGROUND.divisions = gridSize;
+            CONFIG.PLAYGROUND.height = height;
             CONFIG.PLAYGROUND.wallHeight = CONFIG.PLAYGROUND.size / gridSize * height;
             updateWorldSize();
 

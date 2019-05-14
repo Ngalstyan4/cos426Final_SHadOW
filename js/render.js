@@ -6,9 +6,14 @@ var meshes = [];
 var goal = [];
 var win = false;
 
+var type = 0;
+
+var blockColor = new THREE.Color(0,0,0);
+
 function deleteBlocks(){
     for (var i = 0; i<meshes.length;i++){
         scene.remove(meshes[i]);
+        meshes[i].dispose();
     }
     meshes = [];
 }
@@ -16,6 +21,7 @@ function deleteBlocks(){
 function deleteGoal(){
     for (var i = 0; i<goal.length;i++){
         scene.remove(goal[i]);
+        scene.dispose();
     }
     goal = [];
 }
@@ -270,16 +276,27 @@ function render() {
 
             var geometry = new THREE.BoxGeometry( cellSideLen, cellSideLen, cellSideLen );
             // todo:: consider lambert and Phong materials here
-            var materials = [1,2,3,4].map(i => new THREE.MeshLambertMaterial( {map: loader.load('assets/textures/wood' + i + '.jpg')} ));
-            let ind = Math.floor(Math.random() * materials.length);
-            var cube = new THREE.Mesh( geometry, materials[ind] );
+            var material;
+            if (type === 2){
+                material = new THREE.MeshBasicMaterial();
+                material.color = blockColor.clone();
+            }
+            else if (type === 1){
+                material = new THREE.MeshNormalMaterial();
+            }
+            else{
+                var materials = [1,2,3,4].map(i => new THREE.MeshLambertMaterial( {map: loader.load('assets/textures/wood' + i + '.jpg')} ));
+                let ind = Math.floor(Math.random() * materials.length);
+                material = materials[ind];
+            }
+            var cube = new THREE.Mesh( geometry, material );
             cube.castShadow =true;
-            scene.add( cube );
-
-            meshes.push(cube);
             // change the coordinate system
             y += CONFIG.PLAYGROUND.groundLevel;
             cube.position.set(x,y,z);
+
+            scene.add( cube );
+            meshes.push(cube);
 
             if (game){
                 checkWinCondition();

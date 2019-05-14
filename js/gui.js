@@ -4,9 +4,11 @@
 //all below defined in initWorld END
 
 var reader = new (function(){
-    this.filename = "tensorflow";
+    this.filename = "none";
 
 })();
+
+var guiControls;
 
 function initGui() {
 
@@ -14,10 +16,13 @@ function initGui() {
 
     if (guiEnabled) {
         // GUI properties
-        let guiControls = new (function() {
+        guiControls = new (function() {
             this.camera = camera.position;
             this.debug = CONFIG.DEBUG;
+            this.blockColor = new THREE.Color();
             this.newLevel = ""
+            this.gridSize = CONFIG.PLAYGROUND.divisions;
+            this.height = CONFIG.PLAYGROUND.height;
         })();
 
         // GUI elements
@@ -42,9 +47,59 @@ function initGui() {
         cameraControls.add(guiControls.camera, "y").step(0.001).name("Camera Y").listen();
         cameraControls.add(guiControls.camera, "z").step(0.001).name("Camera Z").listen();
 
+        let sizeControl = gui.addFolder("Size");
+        sizeControl.add(guiControls, "gridSize", 6, 12)
+            .step(1)
+            .name("Grid Size")
+            .onChange(function(value) {
+                nextDivision = value;
+                if (reader.filename != "none"){
+                    //message this cannot be done in game mode
+                    $('#exampleModalLabel').text("Sorry!");
+                    $('.modal-body').text("You cannot change the map size in game mode. Try changing to level \"none\"");
+                    $('#gameModal').modal('show');
+                    return;
+                }
+                CONFIG.PLAYGROUND.divisions = value;
+                CONFIG.PLAYGROUND.wallHeight = CONFIG.PLAYGROUND.size / CONFIG.PLAYGROUND.divisions * CONFIG.PLAYGROUND.height;
+                deleteBlocks();
+                updateWorldSize();
+            });
+
+        sizeControl.add(guiControls, "height", 6, 12)
+            .step(1)
+            .name("Height")
+            .onChange(function(value) {
+                nextHeight = value;
+                if (reader.filename != "none"){
+                    //message this cannot be done in game mode
+                    $('#exampleModalLabel').text("Sorry!");
+                    $('.modal-body').text("You cannot change the map height in game mode. Try changing to level \"none\"");
+                    $('#gameModal').modal('show');
+                    return;
+                }
+                CONFIG.PLAYGROUND.height = value;
+                CONFIG.PLAYGROUND.wallHeight = CONFIG.PLAYGROUND.size / CONFIG.PLAYGROUND.divisions * CONFIG.PLAYGROUND.height;
+                updateWorldSize();
+            });
+
+        let appearanceControls = gui.addFolder("Block Type");
+
+        appearanceControls.add({textureCube}, "textureCube").name("Texture Cube");
+        appearanceControls.add({normalCube}, "normalCube").name("Normal Cube");
+        appearanceControls.add({colorCube}, "colorCube").name("Color Cube");
+
+        appearanceControls
+        .addColor(guiControls, "blockColor")
+        .name("Block Color")
+        .onChange(function(value) {
+            blockColor.setRGB(value.r/255, value.g/255, value.b/255);
+        });
+
         
         gui.add(reader, 'filename', [ 'none', 'line', '2-3', '2-5', 'tensorflow', 'CHALLENGE', 'House-Duck', 'Heart-Diamond'] ).name("CHOOSE LEVEL").
         onChange(v => {
+            reader.filename = v;
             setLevel(v + ".txt")
             // if (v == "House-Duck") {
             //     $('#exampleModalLabel').text("Tadaaaaam");
@@ -99,6 +154,16 @@ function saveLevel() {
     $('.modal-body').html(htm);
     $('#gameModal').modal('show');
     var clipboard = new Clipboard('#copy');
+}
 
+function colorCube(){
+    type = 2;
+}
 
+function normalCube(){
+    type = 1;
+}
+
+function textureCube(){
+    type = 0;
 }
