@@ -4,6 +4,7 @@ if (!Detector.webgl) Detector.addGetWebGLMessage();
 
 var meshes = [];
 var goal = [];
+var borders = [];
 var win = false;
 
 var type = 0;
@@ -14,7 +15,11 @@ function deleteBlocks(){
     for (var i = 0; i<meshes.length;i++){
         scene.remove(meshes[i]);
     }
+    for (var i = 0; i<borders.length;i++){
+        scene.remove(borders[i].shape);
+    }
     meshes = [];
+    borders = [];
 }
 
 function deleteGoal(){
@@ -229,10 +234,18 @@ function render() {
             if (intersects[0].object !== wholePlane){
 
                 if(del_cube) {
-                    console.log(intersects, intersectArray, intersectArray.indexOf(intersects[0].object));
+                    for (var i = 0; i<borders.length; i++){
+                        if (borders[i].box === intersects[0].object.position){
+                            scene.remove(borders[i].shape);
+                        }
+                    }
+                    borders = borders.filter(o => o.box !== intersects[0].object.position);
+
                     scene.remove(intersects[0].object);
                     meshes = meshes.filter(o => o !==intersects[0].object);
-                    checkWinCondition();
+
+                    if (game)
+                        heckWinCondition();
                     click = false;
                     return;
                 }
@@ -273,6 +286,8 @@ function render() {
             }
 
             var geometry = new THREE.BoxGeometry( cellSideLen, cellSideLen, cellSideLen );
+            // change the coordinate system            
+
             // todo:: consider lambert and Phong materials here
             var material;
             if (type === 2){
@@ -289,12 +304,22 @@ function render() {
             }
             var cube = new THREE.Mesh( geometry, material );
             cube.castShadow =true;
-            // change the coordinate system
-            y += CONFIG.PLAYGROUND.groundLevel;
-            cube.position.set(x,y,z);
 
             scene.add( cube );
             meshes.push(cube);
+
+            y += CONFIG.PLAYGROUND.groundLevel;
+            cube.position.set(x,y,z);
+
+            geometry = new THREE.BoxGeometry( cellSideLen, cellSideLen, cellSideLen );
+            geometry.translate(x,y,z);
+            // wireframe
+            var geo = new THREE.EdgesGeometry( geometry );
+            var mat = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 16 } );
+            var wireframe = { shape: new THREE.LineSegments( geo, mat ) , box: cube.position};
+            wireframe.shape.renderOrder = 1; // make sure wireframes are rendered 2nd
+            scene.add( wireframe.shape );
+            borders.push(wireframe);
 
             if (game){
                 checkWinCondition();
