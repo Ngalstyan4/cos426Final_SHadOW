@@ -8,6 +8,8 @@ html, body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+
+    background-color: #eaeaea;
 }
 
 .selectable {
@@ -71,7 +73,7 @@ img {
 
 .assignment {
     font-size: 100%;
-    color: #228B22;
+    color: #18a318;
 }
 
 .image {
@@ -117,10 +119,10 @@ h1, h2, h3, h4 {
     letter-spacing: 2px;
     opacity: 0.5;
     text-shadow:
-       -1px -1px 1px #eee,
-        1px -1px 1px #eee,
-        -1px 1px 1px #eee,
-         1px 1px 1px #eee;
+       -1px -1px 1px #ccc,
+        1px -1px 1px #ccc,
+        -1px 1px 1px #ccc,
+         1px 1px 1px #ccc;
 }
 
 h1 {
@@ -145,7 +147,7 @@ h4 {
 
 a, a:visited, a:active {
     text-decoration: none;
-    color: #8CE;
+    color: #3aa0ff;
 }
 
 a:hover {
@@ -160,7 +162,7 @@ button {
     text-align:center;
     margin:auto auto auto auto;
     border:1px solid #c4c5c6;  -webkit-border-radius: 8px; -moz-border-radius: 8px;border-radius: 8px;
-    text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
     background-color: #f2f5f6; background-image: -webkit-gradient(linear, left top, left bottom, from(#333), to(#222));
     background-image: -webkit-linear-gradient(top, #333, #222);
     background-image: -moz-linear-gradient(top, #333, #222);

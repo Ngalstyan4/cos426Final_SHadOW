@@ -10,7 +10,7 @@ var reader = new (function(){
 
 function clamp(num, min, max) {
     return num <= min ? min : num >= max ? max : num;
-  }
+}
 
 var saveString = null;
 var guiControls;
@@ -24,8 +24,8 @@ function initGui() {
         guiControls = new (function() {
             this.camera = camera.position;
             this.debug = CONFIG.DEBUG;
-            this.blockColor = new THREE.Color();
-            this.newLevel = ""
+            this.blockColor = new THREE.Color(0.5,0.5,0.5);
+            this.newLevel = "";
             this.gridSize = CONFIG.PLAYGROUND.divisions;
             this.height = nextHeight;
             this.constrainBlocks=true;
