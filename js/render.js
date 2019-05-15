@@ -268,7 +268,6 @@ function render() {
             y -= CONFIG.PLAYGROUND.groundLevel;
 
             if (intersects[0].object !== wholePlane){
-
                 if(del_cube) {
                     for (var i = 0; i<borders.length; i++){
                         if (borders[i].box === intersects[0].object.position){

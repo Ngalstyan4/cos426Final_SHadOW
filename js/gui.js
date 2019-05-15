@@ -8,6 +8,7 @@ var reader = new (function(){
 
 })();
 
+var saveString = null;
 var guiControls;
 
 function initGui() {
@@ -84,7 +85,11 @@ function initGui() {
                 updateWorldSize();
             });
 
-        let appearanceControls = gui.addFolder("Block Type");
+        let saveState = gui.addFolder("Save Settings");
+        saveState.add({saveWorld}, "saveWorld").name("Save State to File");
+        saveState.add({loadWorld}, "loadWorld").name("Load State to File");
+
+        let appearanceControls = gui.addFolder("Creative Tools");
 
         appearanceControls.add({textureCube}, "textureCube").name("Texture Cube");
         appearanceControls.add({normalCube}, "normalCube").name("Normal Cube");
@@ -166,4 +171,111 @@ function normalCube(){
 
 function textureCube(){
     type = 0;
+}
+
+function saveWorld(){
+    var str = CONFIG.PLAYGROUND.divisions + " " + CONFIG.PLAYGROUND.height + "\n";
+    for (var i = 0; i < meshes.length; i++){
+        var cube = meshes[i];
+        str = str + cube.position.x + " " + cube.position.y + " " + cube.position.z + " ";
+        if (cube.material instanceof THREE.MeshNormalMaterial){
+            str = str + "1\n";
+        }
+        else if (cube.material instanceof THREE.MeshBasicMaterial){
+            str = str + "2 " + cube.material.color.r + " " + cube.material.color.g + " " + cube.material.color.b + "\n";
+        }
+        else if (cube.material instanceof THREE.MeshLambertMaterial){
+            str = str + "0\n";
+        }
+    }
+    saveTextAsFile(str, "level.txt");
+}
+
+function loadFile(){
+    var fileToLoad = document.getElementById("saveFile").files[0];
+ 
+    if (fileToLoad != ""){
+        var fileReader = new FileReader();
+        fileReader.onload = function(fileLoadedEvent) 
+        {
+            saveString = fileLoadedEvent.target.result;
+            console.log(saveString);
+        };
+        fileReader.readAsText(fileToLoad, "UTF-8");
+    }
+}
+
+function loadWorld(){
+    if (saveString === null){
+        $('#exampleModalLabel').text("That was unexpected!");
+        $('.modal-body').text("In order to load a board you need to submit a save file in the input on the left side of the screen. If you did and this is not working, let us know in the Feedback Form.");
+        $('#gameModal').modal('show');
+        return;
+    }
+
+    deleteBlocks();
+
+    var lines = saveString.split("\n");
+    var number = lines[0].split(" ");
+    var w = parseInt(number[0]);
+    var h = parseInt(number[1]);
+
+    if (reader.filename !== "none" && (w!==CONFIG.PLAYGROUND.divisions || h!==CONFIG.PLAYGROUND.height)){
+        $('#exampleModalLabel').text("Sorry!");
+        $('.modal-body').text("You cannot upload a file of different dimenstions in game mode. Try changing to level \"none\"");
+        $('#gameModal').modal('show');
+        return;
+    }
+    else if (w!==CONFIG.PLAYGROUND.divisions || h!==CONFIG.PLAYGROUND.height){
+        CONFIG.PLAYGROUND.height = h;
+        CONFIG.PLAYGROUND.divisions = w;
+        CONFIG.PLAYGROUND.wallHeight = CONFIG.PLAYGROUND.size / CONFIG.PLAYGROUND.divisions * CONFIG.PLAYGROUND.height;
+        updateWorldSize();
+    }
+
+    for (var i = 1; i<lines.length; i++){
+        var numbers = lines[i].split(" ");
+
+        var cellSideLen = CONFIG.PLAYGROUND.size / CONFIG.PLAYGROUND.divisions;
+        var geometry = new THREE.BoxGeometry( cellSideLen, cellSideLen, cellSideLen );
+    
+        var material;
+        if (parseInt(numbers[3]) === 2){
+            material = new THREE.MeshBasicMaterial();
+            material.color = new THREE.Color(parseFloat(numbers[4]),parseFloat(numbers[5]),parseFloat(numbers[6]));
+        }
+        else if (parseInt(numbers[3]) === 1){
+            material = new THREE.MeshNormalMaterial();
+        }
+        else{
+            var materials = [1,2,3,4].map(i => new THREE.MeshLambertMaterial( {map: loader.load('assets/textures/wood' + i + '.jpg')} ));
+            let ind = Math.floor(Math.random() * materials.length);
+            material = materials[ind];
+        }
+        var cube = new THREE.Mesh( geometry, material );
+        cube.castShadow =true;
+
+        scene.add( cube );
+        meshes.push(cube);
+
+        var x = parseFloat(numbers[0]);
+        var y =  parseFloat(numbers[1]);
+        var z =  parseFloat(numbers[2]);
+
+        cube.position.set(x,y,z);
+
+        geometry = new THREE.BoxGeometry( cellSideLen, cellSideLen, cellSideLen );
+        geometry.translate(x,y,z);
+        // wireframe
+        var geo = new THREE.EdgesGeometry( geometry );
+        var mat = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 16 } );
+        var wireframe = { shape: new THREE.LineSegments( geo, mat ) , box: cube.position};
+        wireframe.shape.renderOrder = 1; // make sure wireframes are rendered 2nd
+        scene.add( wireframe.shape );
+        borders.push(wireframe);
+    }
+
+    if (game)
+        checkWinCondition();
+
 }

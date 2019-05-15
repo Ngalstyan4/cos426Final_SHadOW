@@ -76,8 +76,9 @@
 
 
 		</div>
-		<div style="position: absolute; top:60px; left: 0 "><h1></h1><a href="https://forms.gle/EhTa2zvjn96WkPR3A"><h1>Give Feedback</h1></a></div>
-		<div style="position: absolute; top:120px; left: 0 "><h1></h1><a href="/writeup.html"><h1>Project Report</h1></a></div>
+		<div style="position: absolute; top:60px; left: 0 "><a href="https://forms.gle/EhTa2zvjn96WkPR3A"><h1>Give Feedback</h1></a></div>
+		<div style="position: absolute; top:120px; left: 0 "><a href="/writeup.html"><h1>Project Report</h1></a></div>
+		<div style="position: absolute; top:180px; left: 0 "><h4>Upload savefile: </h4><input style="margin-left: 10px" type="file" id = "saveFile" onchange="loadFile()"></input></div>
 
     <div id="alert_div" title="alert"> </div>
 
@@ -109,6 +110,7 @@
 				gl_Position = projectionMatrix * mvPosition;
 			}
 		</script>
+		<script src="js/output.js"> </script>
 	<script src="js/config.js"> </script>
 	<script src="js/initWorld.js"> </script>
 	<script src="js/events.js"> </script>
