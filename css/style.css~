@@ -21,7 +21,9 @@ html, body {
 
 body {
     font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
-    font-size: 20px; 
+    font-size: 20px;
+    color: #eee;
+    background: #222;
     margin: 0;
 }
 
@@ -54,7 +56,6 @@ img.demoplot {
     max-height: 220px;
 }
 img {
-    align:center;
     max-width: 640px;
     margin-left: 30px;
 }
@@ -71,7 +72,7 @@ img {
 
 .assignment {
     font-size: 100%;
-    color: #228B22;
+    color: #ddd;
 }
 
 .image {
@@ -117,10 +118,10 @@ h1, h2, h3, h4 {
     letter-spacing: 2px;
     opacity: 0.5;
     text-shadow:
-       -1px -1px 1px #eee,
-        1px -1px 1px #eee,
-        -1px 1px 1px #eee,
-         1px 1px 1px #eee;
+       -1px -1px 1px #000,
+        1px -1px 1px #000,
+        -1px 1px 1px #000,
+         1px 1px 1px #000;
 }
 
 h1 {

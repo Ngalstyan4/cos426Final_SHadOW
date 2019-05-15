@@ -107,7 +107,7 @@ function initGui() {
             blockColor = new THREE.Color(clamp(value.r/256,0,1), clamp(value.g/256,0,1),clamp(value.b/256,0,1));
         });
 
-        let gameSettings = gui.addFolder("Game Settings");
+        let gameSettings = gui.addFolder("Game Settings").open();
 
         gameSettings.add(reader, 'filename', [ 'none', 'line', '2-3', '2-5', 'tensorflow', 'CHALLENGE', 'House-Duck', 'Heart-Diamond'] ).name("CHOOSE LEVEL").
         onChange(v => {
