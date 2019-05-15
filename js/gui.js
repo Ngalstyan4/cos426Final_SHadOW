@@ -8,6 +8,10 @@ var reader = new (function(){
 
 })();
 
+function clamp(num, min, max) {
+    return num <= min ? min : num >= max ? max : num;
+  }
+
 var saveString = null;
 var guiControls;
 
@@ -25,6 +29,7 @@ function initGui() {
             this.gridSize = CONFIG.PLAYGROUND.divisions;
             this.height = nextHeight;
             this.constrainBlocks=true;
+            this.remove = false;
         })();
 
         // GUI elements
@@ -99,7 +104,7 @@ function initGui() {
         .addColor(guiControls, "blockColor")
         .name("Block Color")
         .onChange(function(value) {
-            blockColor.setRGB(value.r/256, value.g/256, value.b/256);
+            blockColor = new THREE.Color(clamp(value.r/256,0,1), clamp(value.g/256,0,1),clamp(value.b/256,0,1));
         });
 
         let gameSettings = gui.addFolder("Game Settings");
@@ -114,6 +119,12 @@ function initGui() {
         .name("Limit to Grid")
         .onChange(function(value) {
             constrain = value;
+        });
+
+        gui.add(guiControls, "remove")
+        .name("Remove Blocks")
+        .onChange(function(value) {
+            del_cube = value;
         });
     }
 }
@@ -155,10 +166,10 @@ function saveLevel() {
     res += walls[1].reverse().map(wall => wall.reverse().map(a => a? "X":".").reduce((a,b) => a + " " + b )).reduce((a,b) => a+"\n"+b);
     $('#exampleModalLabel').text("This is encoding of the level you created!!");
     let htm = "<p>Please share it with us in the feedback form <a target='blank' href='https://forms.gle/Zjo4zGi1SFiV4siv6'>here</a><!/p><textarea style='width:200px; height:300px;' type='text' class='form-control classname' id='copy-input' cols=40 rows=20readonly>"+res+"</textarea>";
-    htm += "<a href='#' id='copy' data-clipboard-target='#copy-input' class='btn btn-default'>Copy input content to clipboard</a>"
+    //htm += "<a href='#' id='copy' data-clipboard-target='#copy-input' class='btn btn-default'>Copy input content to clipboard</a>"
     $('.modal-body').html(htm);
     $('#gameModal').modal('show');
-    var clipboard = new Clipboard('#copy');
+    //var clipboard = new Clipboard('#copy-input');
 }
 
 function colorCube(){
@@ -199,7 +210,6 @@ function loadFile(){
         fileReader.onload = function(fileLoadedEvent) 
         {
             saveString = fileLoadedEvent.target.result;
-            console.log(saveString);
         };
         fileReader.readAsText(fileToLoad, "UTF-8");
     }

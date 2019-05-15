@@ -4,8 +4,6 @@
 </head>
 
 <body>
-<script src="js/student.js"> </script>
-<script src="js/writeup.js"> </script>
 <div class="top">
 <div class="main_div">
 
@@ -33,11 +31,12 @@ we decided to build a game with a simpler form of shapes (blocks).
 <h3>What did we try to do</h3>
 We built a 3D game where the goal is to build a 3D object that casts a predetermined shadow. It is trivially easy to go the other way round: given 3D object,
 predict its shadows. However, We felt the opposite of the problem is just hard enough that it lies on that perfect game difficulty curve. Having built the game, we think this
-intuition was correct as the game has been quite amusing and absorbing for us and for others we asked to play.
+intuition was correct as the game has been quite amusing and absorbing for us and for others we asked to play. Furthermore, the many ways to arrive a solution, we think could nurture a
+creative community around building (and sharing) aesthetic solutions.
 
 <h3>Who would benefit?</h3>
 The game is not meant to be played for hours. It is a nice little fidgeting tool for college students, adults and anyone else who want to spend their breaks solving a
-small interesting puzzle in a visually pleasing environment.
+small interesting puzzle in a visually pleasing environment, or who want to build something cool-looking and share it with their peers.
 
 <p><hr><p><a name='previous'></a><h2>Previous Work</h2><p><hr><p></p>
 <h3>What related work have other people done?</h3>
@@ -45,7 +44,8 @@ small interesting puzzle in a visually pleasing environment.
 Shadowmatic is the game we took the greatest inspiration from. It presents the player with a set of objects that initially do not look like anything but if viewed from correct direction,
 this suddenly changes.
 <br>
-We also took some ideas from Monument Valley game when designing our levels. This game offers a great diversity of block-structured game levels.
+We also took some ideas from Monument Valley game when designing our levels. This game offers a great diversity of block-structured game levels. Finally, games like Minecraft inspired
+the idea of using the blocks to build recreations of 3D shapes with voxels in an intuitive way (think Minecraft creative mode).
 
 <br><br><img src='assets/results/shadowmatic.jpg'><br><br>
 
@@ -65,7 +65,8 @@ these blocks such that they cast a shadow that is color-outlined on the walls al
 
 <h3>Under what circumstances do we think it should work well?</h3>
 This game we think works best when directly appealing to the creativity of the user. There are multiple solutions to a single shadow game, and our cube editor has various block options
-to which to choose from. We can imagine this as a game of sharing as well, where the solutions to a puzzle, or more complicated levels, can be shared with other users.
+to which to choose from. We can imagine this as a game of sharing as well, where the solutions to a puzzle, or more complicated levels, can be shared with other users. We implemented a simple
+method in which to export creations to a file, and to import them back into the game. This is a neat way to share designs and save progress.
 
 <p><hr><p><a name='methodology'></a><h2>Methodology</h2><p><hr><p></p>
 <h3>What pieces had to be implemented to execute our approach?</h3>
@@ -94,6 +95,17 @@ Another interesting challenge that had to be addressed here was the difficulty o
 followed by *mousemove*. We wanted not to have separate controls for both as computer users are used to using clicks and drags interchangeable. That is why we implemented a series of event
 handlers that executed a state machine correctly ending in *clicked* or *dragged* states when respective actions got triggered by the user.
 
+<h3>Types of Blocks</h3>
+
+We implemented several types of block materials that the user could change. In the case of color blocks, we also gave the user the possibility to change the color of each block they are putting.
+This expands the creative possibilities and lets us create maps like the following:
+
+<br><br><img src='assets/results/different.jpg'><br><br>
+<br><br><img src='assets/results/house.gif'><br><br>
+
+One last thing to note is that, since blocks do not have outlines, it was hard to tell when a block started and ended. Thus, we added a line geometry around all our boxes that serves as a wireframe
+around the boxes. This greatly improved visibility.
+
 <h3>Levels</h3>
 To implement levels, we had to make sure that the user knew exactly what kind of shadow they had to target on the wall. Naturally, we needed to do this in a way that they could see what parts
 of the shadow they had and which ones they did not. We settled then in setting semi-transparent planes in the wall marking the locations of the shadows. Then, the projection of the shadows
@@ -116,6 +128,13 @@ by their imagination (and maximum playground resolution) seamlessly share these 
 
 <br><br><img src='assets/results/level-to-save.jpg'><br><br>
 <br><br><img src='assets/results/saved-level.png'><br><br>
+
+<h4>Saving Block Designs</h4>
+We added an input/output method with text files into the websites. With this, the user can export a representation of the map into their computer, and reupload it later. In order to go from
+geometry to text, and viceversa, we saved the dimensions of the map, the position of all block geometries, the type of block and the color (if appropriate). Then, when re-uploading, it
+was just a matter of recreating all of these objects into our scene.
+
+<br><br><img src='assets/results/savefile.gif'><br><br>
 
 <h4>Win Animation</h4>
 When the player completed the game, we wanted to really celebrate their achievement. An alert of “You won!” would not cut it. So, we integrated Tween library to automatically move the
@@ -142,10 +161,11 @@ in large levels such as ”Heart-Diamond” it may be tedious to click for every
 location of the initial block and drag to automatically fill the rest.
 
 <h3>What follow-up work should be done next?</h3>
-An immediate next step, which we would have done, had it not been the Dean’s date, would be to add a backend. This would enable a range of possibilities and make the game more production ready.
-We could even make the game multiplayer where participants could compete based on number of blocks and the speed of completion in a given level.
+An immediate next step would have been to add a backend. This would enable a range of possibilities and make the game more production ready.
+A backend would allow us to add a competitive component where players could compete based on number of blocks and the speed of completion in a given level.
+Similarly, we could implement a creation-sharing tool that would allow players to see other cool solutions, download them and mod them on their own.
 <br>
-We would like to also experiment with a 3-wall version of the game. The shadow space is still greatly underconstrained and there are several solutions to many levels. 3-wall version would
+We would also like to experiment with a 3-wall version of the game. The shadow space is still greatly underconstrained and there are several solutions to many levels. 3-wall version would
 additionally have a wall in the ceiling with an appropriate light to project shadows on the wall. Then a level would be specified by three projected shadows thereby making the challenge
 strictly more difficult.
 
@@ -164,12 +184,18 @@ we are very happy we made it and may even try to permanently host it on the publ
 
 <p><hr><p><a name='sources'></a><h2>Sources</h2><p><hr><p></p>
 
-We used the THREE.JS library when building this assignment, along with the skeleton code from Assignment 5. This writeup format is based on the one used for the course.
+We used the THREE.JS library extensively when building this assignment.
+<br>
+This writeup format and the starter code used for this project are based on the ones used for Assignment 5.
+<br>
+The code for outputting a file was modified from: https://thiscouldbebetter.wordpress.com/2012/12/18/loading-editing-and-saving-a-text-file-in-html5-using-javascrip/
+<br>
+Lastly, we obtained the textures used from TurboSquid.
 
 <p><hr><p><a name='acknowledgements'></a><h2>Acknowledgements</h2><p><hr><p></p>
-We would like to thank everyone who agreed to play with, and test earlier and waaaaay less fun versions of this game. You all provided very valuable feedback which made the game what it is now.
+We would like to thank everyone who agreed to play with, and test earlier (way less fun) versions of this game. You all provided very valuable feedback which made the game what it is now.
 <br> 
-We would also like to thank all of the course staff for feedback and for helping us learn valuable skills without which we could create anything close to what we have!
+We would also like to thank all of the course staff for feedback and for helping us learn valuable skills without which we could have not created anything close to what we have!
 </div>
 </div>
 </body>
