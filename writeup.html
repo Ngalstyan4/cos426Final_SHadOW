@@ -30,13 +30,13 @@ we decided to build a game with a simpler form of shapes (blocks).
 
 <h3>What did we try to do</h3>
 We built a 3D game where the goal is to build a 3D object that casts a predetermined shadow. It is trivially easy to go the other way round: given 3D object,
-predict its shadows. However, We felt the opposite of the problem is just hard enough that it lies on that perfect game difficulty curve. Having built the game, we think this
-intuition was correct as the game has been quite amusing and absorbing for us and for others we asked to play. Furthermore, the many ways to arrive a solution, we think could nurture a
+predict its shadows. However, we felt the opposite of the problem is just hard enough that it lies on that perfect game difficulty curve. Having built the game, we think this
+intuition was correct as the game has been quite amusing and absorbing for us and for others we asked to play. Furthermore, we think the many ways to arrive to a solution could nurture a
 creative community around building (and sharing) aesthetic solutions.
 
 <h3>Who would benefit?</h3>
 The game is not meant to be played for hours. It is a nice little fidgeting tool for college students, adults and anyone else who wants to spend their breaks solving a
-small interesting puzzle in a visually pleasing environment, or who wants to build some cool-looking voxel-art in a shadowy environment and share it with their peers.
+small interesting puzzle in a visually pleasing environment, or who wants to build some cool-looking voxel-art (with cool projecting shadows) and share it with their peers.
 
 
 <p><hr><p><a name='previous'></a><h2>Previous Work</h2><p><hr><p></p>
@@ -58,47 +58,47 @@ built off of their approach and that they fail/succeed at anything in particular
 <h3>What approach did we try?</h3>
 We built a 3D game environment that in the barebones consists of a grid floor, and 2 walls (and a lot of invisible stuff some of which you can learn about in the report or can look at our code).
 <br>
-In the game the player primarily navigates using mouse movements, mouse clicks. Mouse click and drags provide an intuitive interface for changing viewpoint in the game. Mouse clicks on the two
-dimensional floor add cubes at the click location. Two light sources parallel to two walls and infinitely far from them cast the shadows of the blocks on side walls. The goal is to place
+In the game the player primarily navigates using mouse movements and mouse clicks. Mouse click and drags provide an intuitive interface for changing viewpoint in the game. Mouse clicks on the two
+dimensional floor add cubes at the click location. Two light sources parallel to two walls, and infinitely far from them, cast the shadows of the blocks on side walls. The goal is to place
 these blocks such that they cast a shadow that is color-outlined on the walls already. Each level of the game consists of one such outline on the walls ranging from trivial to quite challenging.
 
 <br><br><img src='assets/results/mousemove.gif'><br><br>
 
 <h3>Under what circumstances do we think it should work well?</h3>
 
-We think this game works best when used to approached with creativity as there are multiple solutions to a single shadow game, and our cube editor has various block options
-to which to choose from. We can imagine this as a game of sharing as well, where the solutions to a puzzle, or more complicated levels, can be shared with other users. We implemented a simple
-method in which to export creations to a file, and to import them back into the game. This is a neat way to share designs and save progress.
+We think this game works best when trying to solve the levels creatively, as there are multiple solutions to a single shadow game, and our cube editor has various block options
+from which to choose from. We can imagine this as a game of sharing as well, where the solutions to a puzzle can be shared with other users. To simplify this last task, we implemented a
+method to export creations to a file, and to import them back into the game. This is a nice way to share designs and save progress.
 
 <p><hr><p><a name='methodology'></a><h2>Methodology</h2><p><hr><p></p>
 <h3>What pieces had to be implemented to execute our approach?</h3>
-Below we present a subset of elements that we had to implement to make this game a reality. We tried to include most interesting examples and did not list all of them for the interest of
-space.
+Below we present a subset of elements that we had to implement to make this game a reality. We tried to include most of the interesting examples we had, but we did not list all of them to
+keep the report as succint as possible.
 
 <h3>Initial World</h3>
 We set up our initial world with all the visible elements in addition to several hidden components. Such hidden components include: Additional floor plane, cameras, shadows lights, hidden html
 windows, etc.
 <br>
-Two particular implementation details that are worth mentioning are sidewall and floor geometries. The visible floor consists of a grid which made it impossible to do appropriate raycasting
-so we could detect which square the mouse is on. To solve this at the location of the floor grid we also added a transparent plane and looked for intersections with this plane during raycasting.
+Two particular implementation details that are worth mentioning are sidewall and floor geometries. The visible floor consists of a grid, which cannot do appropriate raycasting,
+so we could detect which square the mouse is on. To solve this at the location of the floor grid, we also added a transparent plane and looked for intersections with this plane during raycasting.
 <br>
 When working on the sidewalls, we realized that sometimes it is difficult to put blocks close to the sidewall when there are other existing blocks obscuring the view. Therefore,
-instead of a solid wall, we created two walls per visible wall. Both are single sided walls and therefore can take different threejs opacity values. We used this trick to make the wall
-half transparent when viewed from behind.
+instead of a solid wall, we created two walls per visible wall. Both are single sided walls and therefore can take different three.js opacity values. We used this trick to make the wall
+half-transparent when viewed from behind.
 
 <br><br><img src='assets/results/transparent-wall.jpg'><br><br>
 
 <h3>Rendering</h3>
 Rendering cubes in correct locations with correct parameters was quite hard and tedious. This became even harder when considering possible changes of grid sizes. We settled by setting our own
 version of a coordinate system that we rescaled appropriately according to the grid size. Then, we figured out, for each cube added, what is the correct <q>voxel</q> that it should occupy.
-Adding to this difficulty was then adding the selection shape on the cubes and the borders around it. We did this by working the position and rotation based on that of the targeted object.
-<br>
-Another interesting challenge that had to be addressed here was the difficulty of differentiating a click from a drag. In Javascript there is no drag event and a drag is just a *mousedown*
-followed by *mousemove*. We wanted not to have separate controls for both as computer users are used to using clicks and drags interchangeable. That is why we implemented a series of event
+Adding to this difficulty was adding the selection panel on the appropriate face cube, and the borders around the cubes. We did this by working the position and rotation based on that of the targeted object.
+
+<h3>Mouse Handling</h3>
+Another interesting challenge that had to be addressed here was the difficulty of differentiating a click from a drag. In Javascript there is no drag event, and a drag is just a *mousedown*
+followed by *mousemove*. We wanted not to have separate controls for both, as computer users are used to using clicks and drags interchangeable. That is why we implemented a series of event
 handlers that executed a state machine correctly ending in *clicked* or *dragged* states when respective actions got triggered by the user.
 
 <h3>Types of Blocks</h3>
-
 We implemented several types of block materials that the user could change. In the case of color blocks, we also gave the user the possibility to change the color of each block they are putting.
 This expands the creative possibilities and lets us create maps like the following:
 
@@ -120,47 +120,48 @@ the wall in that same shape. To do this, we used the projection of the block coo
 
 <h3>Winning Conditions</h3>
 While the visualization of the level followed easily from the object positioning and the lightning, we had to make sure that we could determine if the player has won (or not) the current
-level. To do this, whenever a cube was added or removed, we reverted to the coordinates in number of cubes, projected that into the 2D coordinates represented by each wall, and then
+level. To do this, whenever a cube was added or removed, we reverted to the coordinates based on the number of cubes from the corner (where the walls and floor meet), projected that into the 2D coordinates represented by each wall, and then
 compared that with the coordinates determined by the level file. On a complete match, we showed the user a win message and animation.
 
 <h3>Miscellany</h3>
 <h4>Level Generator</h4>
-We added a GUI element that helps save arbitrary shapes that the player creates on the playground in our internal level format. So, our fans can just incarnate any game levels bounded only
-by their imagination (and maximum playground resolution) seamlessly share these levels with us and have us include them as permanent game levels.
+We added a GUI element that helps save arbitrary shapes that the player creates on the playground in our internal level format. This way, our users  can incarnate any game levels bounded only
+by their imagination (and maximum playground resolution), seamlessly share these levels with us and have us include them as permanent game levels.
 
 <br><br><img src='assets/results/level-to-save.jpg'><br><br>
 <br><br><img src='assets/results/saved-level.png'><br><br>
 
 <h4>Saving Block Designs</h4>
-We added an input/output method with text files into the websites. With this, the user can export a representation of the map into their computer, and reupload it later. In order to go from
+We added an input/output method with text files into the websites. With this, the user can export a representation of the map into their computer, and re-upload it later. In order to go from
 geometry to text, and viceversa, we saved the dimensions of the map, the position of all block geometries, the type of block and the color (if appropriate). Then, when re-uploading, it
-was just a matter of recreating all of these objects into our scene.
+was just a matter of recreating all of these objects into our scene. Sharing these output files allows for sharing of solutions and models as well.
 
 <br><br><img src='assets/results/savefile.gif'><br><br>
 
 <h4>Win Animation</h4>
-When the player completed the game, we wanted to really celebrate their achievement. An alert of <q>You won!</q> would not cut it. So, we integrated Tween library to automatically move the
-camera into wall-parallel views so the player could see that they really did quite some work and their piece matches both shadows.
+When the player completed the game, we wanted to really celebrate their achievement. An alert of <q>You won!</q> did not seem honest and celebratory enough. Instead, we integrated Tween library to automatically move the
+camera into wall-parallel views, so the player could see that they really did quite some work and that their piece matches both shadows.
 
 <br><br><img src='assets/results/win-transition.gif'><br><br>
 
 <p><hr><p><a name='results'></a><h2>Results</h2><p><hr><p></p>
-We asked many of our friends to play the game and give us feedback. Some of the features such as saving levels, adding instructions explaining how to play, adding functionality to
+We asked many of our friends to play the game and give us feedback. Some of the features such as saving levels, adding instructions explaining how to play and adding functionality to
 delete blocks were implemented upon their request. Many of the people that we asked to play our game, not only asked for the public URL to be able to play later, but also asked for the Graphics
 course website to take a look and potentially take the course in the future.
 <br>
 It was very useful to have a simple working prototype early on because it allowed us to continually get feedback as we went on. One feature we got asked for a lot was the ability to save
-progress. This, however, would require a backend with user credentials and game state storage, which we did not have time to put together.
+progress. Doing this online, however, would have required a backend with user credentials and game state storage, which we did not have time to put together. Instead, we settled for local
+storage via text files. 
 
 <p><hr><p><a name='discussion'></a><h2>Discussion</h2><p><hr><p></p>
 <h3>Overall, is the approach we took promising?</h3>
 We think the approach and overall idea is very promising and three.js was just the right tool to write it in. Although as the game progresses, a loud PC fan is unavoidable, given the
-implementation in Javascript, we think three.js was a good choice of environment and we can perhaps optimize it further to use less resources.
+implementation in Javascript, we think three.js was a good choice of environment. We could potentially optimize it further to use less resources.
 
 <h3>What different approach or variant of this approach is better?</h3>
-There is no game feature in the game that we would implement differently. There however are some features that would enable better user experience and more complex levels. For example,
-in large levels such as <q>Heart-Diamond</q> it may be tedious to click for every box as the level requires a lot of boxes. So, we could add a functionality thereby the player could indicate the
-location of the initial block and drag to automatically fill the rest.
+There is no game feature in the game that we would implement differently. There are however some features that would enable better user experience and more complex levels. For example,
+in large levels such as <q>Heart-Diamond</q> it may be tedious to click once for every box, as the level requires a lot of boxes. To fix this, we could add a functionality 
+so the player could indicate the location of the initial block and drag to automatically fill the rest. A help section might be useful to explain all the usage scenarios and features of the game.
 
 <h3>What follow-up work should be done next?</h3>
 An immediate next step would have been to add a backend. This would enable a range of possibilities and make the game more production ready.
@@ -170,6 +171,9 @@ Similarly, we could implement a creation-sharing tool that would allow players t
 We would also like to experiment with a 3-wall version of the game. The shadow space is still greatly underconstrained and there are several solutions to many levels. 3-wall version would
 additionally have a wall in the ceiling with an appropriate light to project shadows on the wall. Then a level would be specified by three projected shadows thereby making the challenge
 strictly more difficult.
+
+Lastly, adding more interesting options for box materials might be interesting from a creative standpoint as it would expand the number of models we could make with the app. Going this route
+though, would require to rework the UI further to make the selection of material faster and more intuitive.
 
 <h3>What did we learn by doing this project?</h3>
 We learned a lot about the underlying mechanics of rendering pipeline. Assignments were not really good at making this clear as most of infrastructure work was already done for us, but the
