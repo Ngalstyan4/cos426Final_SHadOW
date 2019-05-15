@@ -90,7 +90,7 @@ half transparent when viewed from behind.
 
 <h3>Rendering</h3>
 Rendering cubes in correct locations with correct parameters was quite hard and tedious. This became even harder when considering possible changes of grid sizes. We settled by setting our own
-version of a coordinate system that we rescaled appropriately according to the grid size. Then, we figured out, for each cube added, what is the correct “voxel” that it should occupy.
+version of a coordinate system that we rescaled appropriately according to the grid size. Then, we figured out, for each cube added, what is the correct <q>voxel</q> that it should occupy.
 Adding to this difficulty was then adding the selection shape on the cubes and the borders around it. We did this by working the position and rotation based on that of the targeted object.
 <br>
 Another interesting challenge that had to be addressed here was the difficulty of differentiating a click from a drag. In Javascript there is no drag event and a drag is just a *mousedown*
@@ -139,7 +139,7 @@ was just a matter of recreating all of these objects into our scene.
 <br><br><img src='assets/results/savefile.gif'><br><br>
 
 <h4>Win Animation</h4>
-When the player completed the game, we wanted to really celebrate their achievement. An alert of “You won!” would not cut it. So, we integrated Tween library to automatically move the
+When the player completed the game, we wanted to really celebrate their achievement. An alert of <q>You won!</q> would not cut it. So, we integrated Tween library to automatically move the
 camera into wall-parallel views so the player could see that they really did quite some work and their piece matches both shadows.
 
 <br><br><img src='assets/results/win-transition.gif'><br><br>
@@ -159,7 +159,7 @@ implementation in Javascript, we think three.js was a good choice of environment
 
 <h3>What different approach or variant of this approach is better?</h3>
 There is no game feature in the game that we would implement differently. There however are some features that would enable better user experience and more complex levels. For example,
-in large levels such as ”Heart-Diamond” it may be tedious to click for every box as the level requires a lot of boxes. So, we could add a functionality thereby the player could indicate the
+in large levels such as <q>Heart-Diamond</q> it may be tedious to click for every box as the level requires a lot of boxes. So, we could add a functionality thereby the player could indicate the
 location of the initial block and drag to automatically fill the rest.
 
 <h3>What follow-up work should be done next?</h3>
