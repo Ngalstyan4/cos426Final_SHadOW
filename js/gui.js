@@ -24,7 +24,7 @@ function initGui() {
         guiControls = new (function() {
             this.camera = camera.position;
             this.debug = CONFIG.DEBUG;
-            this.blockColor = new THREE.Color(0.5,0.5,0.5);
+            this.blockColor = 0x4286f4;
             this.newLevel = "";
             this.gridSize = CONFIG.PLAYGROUND.divisions;
             this.height = nextHeight;
@@ -95,7 +95,7 @@ function initGui() {
         saveState.add({loadWorld}, "loadWorld").name("Load State to File");
 
         let appearanceControls = gui.addFolder("Creative Tools");
-
+        appearanceControls.open();
         appearanceControls.add({textureCube}, "textureCube").name("Texture Cube");
         appearanceControls.add({normalCube}, "normalCube").name("Normal Cube");
         appearanceControls.add({colorCube}, "colorCube").name("Color Cube");
@@ -104,11 +104,12 @@ function initGui() {
         .addColor(guiControls, "blockColor")
         .name("Block Color")
         .onChange(function(value) {
-            blockColor = new THREE.Color(clamp(value.r/256,0,1), clamp(value.g/256,0,1),clamp(value.b/256,0,1));
+            console.log(value);
+            blockColor = new THREE.Color(value);
         });
 
-        let gameSettings = gui.addFolder("Game Settings").open();
-
+        let gameSettings = gui.addFolder("Game Settings");
+        gameSettings.open();
         gameSettings.add(reader, 'filename', [ 'none', 'line', '2-3', '2-5', 'tensorflow', 'CHALLENGE', 'House-Duck', 'Heart-Diamond'] ).name("CHOOSE LEVEL").
         onChange(v => {
             reader.filename = v;

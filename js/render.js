@@ -10,7 +10,7 @@ var constrain = true;
 
 var type = 0;
 
-var blockColor = new THREE.Color(0,0,0);
+var blockColor = new THREE.Color(66/256,134/256,244/256);
 
 function deleteBlocks(){
     for (var i = 0; i<meshes.length;i++){
