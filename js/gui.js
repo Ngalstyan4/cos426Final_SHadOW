@@ -110,7 +110,7 @@ function initGui() {
 
         let gameSettings = gui.addFolder("Game Settings");
         gameSettings.open();
-        gameSettings.add(reader, 'filename', [ 'none', 'line', '2-3', '2-5', 'tensorflow', 'CHALLENGE', 'House-Duck', 'Heart-Diamond','thankyou'] ).name("CHOOSE LEVEL").
+        gameSettings.add(reader, 'filename', [ 'none', 'line', '2-3', '2-5', 'tensorflow', 'CHALLENGE', 'House-Duck', 'Heart-Diamond','bighouse','thankyou'] ).name("CHOOSE LEVEL").
         onChange(v => {
             reader.filename = v;
             setLevel(v + ".txt")
@@ -164,7 +164,7 @@ function saveLevel() {
     let res = CONFIG.PLAYGROUND.divisions + " " + CONFIG.PLAYGROUND.height + "\n";
     res += walls[0].reverse().map(wall => wall.map(a => a? "X":".").reduce((a,b) => a + " " + b )).reduce((a,b) => a+"\n"+b);
     res += "\n\n";
-    res += walls[1].reverse().map(wall => wall.reverse().map(a => a? "X":".").reduce((a,b) => a + " " + b )).reduce((a,b) => a+"\n"+b);
+    res += walls[1].reverse().map(wall => wall.reverse().map(a => a? "X":".").reduce((a,b) => a + b )).reduce((a,b) => a+"\n"+b);
     $('#exampleModalLabel').text("This is encoding of the level you created!!");
     let htm = "<p>Please share it with us in the feedback form <a target='blank' href='https://forms.gle/Zjo4zGi1SFiV4siv6'>here</a><!/p><textarea style='width:200px; height:300px;' type='text' class='form-control classname' id='copy-input' cols=40 rows=20readonly>"+res+"</textarea>";
     //htm += "<a href='#' id='copy' data-clipboard-target='#copy-input' class='btn btn-default'>Copy input content to clipboard</a>"
