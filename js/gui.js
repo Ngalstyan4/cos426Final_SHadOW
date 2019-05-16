@@ -110,7 +110,7 @@ function initGui() {
 
         let gameSettings = gui.addFolder("Game Settings");
         gameSettings.open();
-        gameSettings.add(reader, 'filename', [ 'none', 'line', '2-3', '2-5', 'tensorflow', 'CHALLENGE', 'House-Duck', 'Heart-Diamond'] ).name("CHOOSE LEVEL").
+        gameSettings.add(reader, 'filename', [ 'none', 'line', '2-3', '2-5', 'tensorflow', 'CHALLENGE', 'House-Duck', 'Heart-Diamond','thankyou'] ).name("CHOOSE LEVEL").
         onChange(v => {
             reader.filename = v;
             setLevel(v + ".txt")
