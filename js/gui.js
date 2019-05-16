@@ -162,7 +162,7 @@ function saveLevel() {
 
 
     let res = CONFIG.PLAYGROUND.divisions + " " + CONFIG.PLAYGROUND.height + "\n";
-    res += walls[0].reverse().map(wall => wall.map(a => a? "X":".").reduce((a,b) => a + " " + b )).reduce((a,b) => a+"\n"+b);
+    res += walls[0].reverse().map(wall => wall.map(a => a? "X":".").reduce((a,b) => a + b )).reduce((a,b) => a+"\n"+b);
     res += "\n\n";
     res += walls[1].reverse().map(wall => wall.reverse().map(a => a? "X":".").reduce((a,b) => a + b )).reduce((a,b) => a+"\n"+b);
     $('#exampleModalLabel').text("This is encoding of the level you created!!");
