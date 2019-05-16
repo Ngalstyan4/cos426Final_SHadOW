@@ -1,20 +1,20 @@
 10 9
-. . . . . . . . . .
-. . X . . . . . . .
-. . X . . . . . X .
-. . . . . . . X . .
-. . . . . . X . . .
-. . . . . X . . . .
-. . . . X X X . . .
-. . . . X X X . . .
-. . . . . X X . . .
+..........
+..X.......
+..X.....X.
+.......X..
+......X...
+.....X....
+....XXX...
+....XXX...
+.....XX...
 
-. . . . . . . . . .
-. . . . . . X . . .
-. . X X X X X X . .
-. X X X X X X X X .
-X X X X X X X X X X
-. X X X X X X X X .
-. X X X X X X X X .
-. X X X X X X X X .
-. X X X X X X X X .
+..........
+......X...
+..XXXXXX..
+.XXXXXXXX.
+XXXXXXXXXX
+.XXXXXXXX.
+.XXXXXXXX.
+.XXXXXXXX.
+.XXXXXXXX.
