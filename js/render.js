@@ -114,7 +114,7 @@ function addGoal(targets){
     if (CONFIG.PLAYGROUND.divisions % 2 == 1){
         sub = -cellSideLen / 2;
     }
-    var sep = -2;
+    var sep = -5;
     for(var i=0; i< targets[0].length; i++){
         for (var j=0; j< targets[0][i].length; j++){
             if (targets[0][i][j]===true){

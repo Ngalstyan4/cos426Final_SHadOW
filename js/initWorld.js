@@ -13,6 +13,8 @@ var sceneDebugElems = [];
 var loader;
 var walls = new Array(2);
 
+var separ = -15;
+
 
 // Objects to update reference
 var wall1Front, wall1Back, wall1shadow, wall2Front, wall2Back, wall2shadow, wall1Light, wall2Light, wall1CameraHelper, wall2CameraHelper;
@@ -126,9 +128,9 @@ function initWorld() {
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge
-    wall1Front.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10);
-    wall1Back.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10);
-    wall1shadow.position.set(0,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10);
+    wall1Front.position.set(separ,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2+separ);
+    wall1Back.position.set(separ,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2+separ);
+    wall1shadow.position.set(separ,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2+separ);
     // wholePlane.rotation.x = Math.PI / 2;
     wall1shadow.castShadow = true;
     wall1shadow.receiveShadow = true;
@@ -163,9 +165,9 @@ function initWorld() {
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-0.1,wallHeight/2,0);
-    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-10,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,0);
-    wall2Front.position.set(-CONFIG.PLAYGROUND.size/2-10,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,0);
-    wall2Back.position.set(-CONFIG.PLAYGROUND.size/2-10,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,0);
+    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2+separ,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,separ);
+    wall2Front.position.set(-CONFIG.PLAYGROUND.size/2+separ,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,separ);
+    wall2Back.position.set(-CONFIG.PLAYGROUND.size/2+separ,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,separ);
 
     scene.add( wall2Front );
     scene.add( wall2Back );
@@ -245,9 +247,9 @@ function updateWorldSize(){
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge
-    wall1Front.position.set(sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10 + sub);
-    wall1Back.position.set(sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10 + sub);
-    wall1shadow.position.set(sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2-10 + sub);
+    wall1Front.position.set(sub+separ,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2+separ + sub);
+    wall1Back.position.set(sub+separ,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2+separ + sub);
+    wall1shadow.position.set(sub+separ,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,-CONFIG.PLAYGROUND.size/2+separ + sub);
     // wholePlane.rotation.x = Math.PI / 2;
 
     wall2Front.geometry = wallGeometry;
@@ -256,9 +258,9 @@ function updateWorldSize(){
     // -0.1 corrections in next 2 lines just make sure that an object on
     // the playground does not cast a shadow on the wall next to it
     // if it ends up on a block right next to the edge    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-0.1,wallHeight/2,0);
-    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2-10+sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,sub);
-    wall2Front.position.set(-CONFIG.PLAYGROUND.size/2-10+sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,sub);
-    wall2Back.position.set(-CONFIG.PLAYGROUND.size/2-10+sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,sub);
+    wall2shadow.position.set(-CONFIG.PLAYGROUND.size/2+separ+sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,sub+separ);
+    wall2Front.position.set(-CONFIG.PLAYGROUND.size/2+separ+sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,sub+separ);
+    wall2Back.position.set(-CONFIG.PLAYGROUND.size/2+separ+sub,wallHeight/2+CONFIG.PLAYGROUND.groundLevel,sub+separ);
 
     // scene.add( wall2 );
     // scene.add( wall2shadow );
