@@ -1,12 +1,13 @@
 "use strict";
 
-var mouse = new THREE.Vector2(200000,2000000), INTERSECTED;
-var del_cube = false;
-var click = false;
+export var mouse = new THREE.Vector2(200000,2000000)
+var INTERSECTED;
+export var del_cube = false;
+export var click = {clicked:false};
 var potentialClick = false;
-var clickMouse = new THREE.Vector2(200000,2000000);
+export var clickMouse = new THREE.Vector2(200000,2000000);
 
-function initEventHandlers() {
+export function initEventHandlers() {
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     window.addEventListener("resize", onWindowResize, false);
 
@@ -38,7 +39,7 @@ function onDocumentMouseDown( event ) {
 
 function onDocumentMouseUp( event ) {
     //event.preventDefault();
-    if (potentialClick) click = true;
+    if (potentialClick) click.clicked = true;
 }
 
 function onWindowResize() {

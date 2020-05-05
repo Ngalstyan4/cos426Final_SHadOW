@@ -1,11 +1,14 @@
 "use strict";
-
-var game = false;
+import {CONFIG} from './config';
+import {initEventHandlers} from './events';
+import {initWorld, updateWorldSize} from './initWorld';
+import {animate} from './animate';
+import {initGui, nextHeight, reader} from './gui';
+import {deleteBlocks, deleteGoal, game} from './render';
 var target = new Array(2);
 
 
 var nextDivision = CONFIG.PLAYGROUND.divisions;
-var nextHeight = 7;
 
 function setLevel(fileName){
     var loader = new THREE.FileLoader();
@@ -21,7 +24,7 @@ function setLevel(fileName){
         updateWorldSize();
 
         //set blank map and return
-        game = false;
+        game.levels = false;
         return;
     }
 
@@ -29,7 +32,7 @@ function setLevel(fileName){
     //load a text file and output the result to the console
     loader.load(fileName,
         function ( data ) {
-            game = true;
+            game.levels = true;
             // Delete block objects and resize
             deleteBlocks();
             deleteGoal();

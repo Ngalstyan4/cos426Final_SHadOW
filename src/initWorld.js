@@ -1,25 +1,26 @@
 "use strict";
-
+import {CONFIG} from './config';
+import {OrbitControls} from './controls/OrbitControls';
 // var mouse; // defined in events.js
-var stats;
-var camera;
-var plane, wholePlane;
+export var stats; //todo::first
+export var camera;
+export var plane;
+export var wholePlane;
 var grid;
-var scene;
-var renderer;
-var controls;
-var raycaster;
+export var scene;
+export var renderer;
+export var controls;
+export var raycaster;
 var sceneDebugElems = [];
-var loader;
+export var loader;
 var walls = new Array(2);
 
 var separ = -15;
 
-
 // Objects to update reference
 var wall1Front, wall1Back, wall1shadow, wall2Front, wall2Back, wall2shadow, wall1Light, wall2Light, wall1CameraHelper, wall2CameraHelper;
 
-function initWorld() {
+export function initWorld() {
 
     // Let there be Light !
     scene = new THREE.Scene();
@@ -33,7 +34,6 @@ function initWorld() {
     camera.position.z = 2980.549;
     camera.lookAt(new THREE.Vector3(0,400,0))
     scene.add(camera);
-
 
     // todo  gui add handle
     if (CONFIG.DEBUG) {
@@ -64,7 +64,7 @@ function initWorld() {
 
 
     // mouse controls
-    controls = new THREE.OrbitControls( camera, renderer.domElement );
+    controls = new OrbitControls( camera, renderer.domElement );
     controls.maxPolarAngle = Math.PI/1.5;
     controls.minDistance = 400;
     controls.maxDistance = 6000;
@@ -211,7 +211,7 @@ function initWorld() {
     raycaster = new THREE.Raycaster();
 }
 
-function updateWorldSize(){
+export function updateWorldSize(){
     scene.remove(grid);
 
     let cellSideLen = CONFIG.PLAYGROUND.size /CONFIG.PLAYGROUND.divisions;

@@ -2,8 +2,11 @@
 //all below defined in initWorld BEGIN
 // var camera;
 //all below defined in initWorld END
+import saveTextAsFile from './output.js';
+import {CONFIG} from './config';
+import {camera, updateWorldSize} from './initWorld';
 
-var reader = new (function(){
+export var reader = new (function(){
     this.filename = "none";
 
 })();
@@ -14,8 +17,8 @@ function clamp(num, min, max) {
 
 var saveString = null;
 var guiControls;
-
-function initGui() {
+export var nextHeight = 7;
+export function initGui() {
 
     var guiEnabled = true;
 
@@ -285,8 +288,4 @@ function loadWorld(){
         scene.add( wireframe.shape );
         borders.push(wireframe);
     }
-
-    if (game)
-        checkWinCondition();
-
 }

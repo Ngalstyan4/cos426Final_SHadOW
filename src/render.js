@@ -1,6 +1,9 @@
 "use strict";
-
+import {CONFIG} from './config';
+import {camera, scene, plane, renderer, wholePlane, raycaster, loader} from './initWorld';
+import {click, mouse, clickMouse, del_cube} from './events';
 if (!Detector.webgl) Detector.addGetWebGLMessage();
+export var game = {levels:false};
 
 var meshes = [];
 var goal = [];
@@ -12,7 +15,7 @@ var type = 0;
 
 var blockColor = new THREE.Color(66/256,134/256,244/256);
 
-function deleteBlocks(){
+export function deleteBlocks(){
     for (var i = 0; i<meshes.length;i++){
         scene.remove(meshes[i]);
     }
@@ -23,7 +26,7 @@ function deleteBlocks(){
     borders = [];
 }
 
-function deleteGoal(){
+export function deleteGoal(){
     for (var i = 0; i<goal.length;i++){
         scene.remove(goal[i]);
     }
@@ -172,7 +175,7 @@ function addGoal(targets){
  //all below defined in initWorld END
 
 // the rendering happens here
-function render() {
+export function render() {
 
     let timer = Date.now() * 0.0002;
 
@@ -259,7 +262,7 @@ function render() {
     intersectArray.push(wholePlane);
 
 
-    if (click){
+    if (click.clicked){
         raycaster.setFromCamera( clickMouse, camera );
         var intersects = raycaster.intersectObjects( intersectArray );
         if ( intersects.length > 0 ) {
@@ -279,9 +282,9 @@ function render() {
                     scene.remove(intersects[0].object);
                     meshes = meshes.filter(o => o !==intersects[0].object);
 
-                    if (game)
+                    if (game.levels)
                         checkWinCondition();
-                    click = false;
+                    click.clicked = false;
                     return;
                 }
                 var normal = intersects[0].face.normal.normalize();
@@ -357,7 +360,7 @@ function render() {
                 scene.add( wireframe.shape );
                 borders.push(wireframe);
 
-                if (game){
+                if (game.levels){
                     checkWinCondition();
                 }
             }
@@ -366,10 +369,11 @@ function render() {
                 meshes = meshes.filter(o => o !==cube);
             }
         }
-        click = false;
+        click.clicked = false;
     }
 
     /* Render mouse hover effects BEGIN */
+
     raycaster.setFromCamera( mouse, camera );
     var intersects = raycaster.intersectObjects( intersectArray );
     if ( intersects.length > 0 ) {

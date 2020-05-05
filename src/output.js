@@ -1,7 +1,7 @@
 /* Snippet of code extracted (and slightly modified) from
 https://thiscouldbebetter.wordpress.com/2012/12/18/loading-editing-and-saving-a-text-file-in-html5-using-javascrip/
 for the purpose of saving to a file with JavaScript */
-function saveTextAsFile(str, filename)
+export default function saveTextAsFile(str, filename)
 {
     var textToWrite = str;
     var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});

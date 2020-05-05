@@ -1,5 +1,5 @@
 "use strict"
-var CONFIG =
+export const CONFIG =
 {
     DEBUG: false,
     HELPER_STRUCTS: {

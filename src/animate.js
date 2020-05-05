@@ -1,6 +1,8 @@
 "use strict";
 
-function animate() {
+import {render} from './render';
+import {stats, controls} from './initWorld';
+export function animate() {
     requestAnimationFrame(animate);
     // let time = Date.now();
     // simulate(); // run physics simulation to create new positions of cloth
