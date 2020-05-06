@@ -1,7 +1,9 @@
 "use strict";
 
 import {render} from './render';
-import {stats, controls} from './initWorld';
+import {controls} from './initWorld';
+import {stats} from './stats';
+
 export function animate() {
     requestAnimationFrame(animate);
     // let time = Date.now();

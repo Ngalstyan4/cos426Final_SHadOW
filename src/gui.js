@@ -2,11 +2,10 @@
 //all below defined in initWorld BEGIN
 // var camera;
 //all below defined in initWorld END
-import saveTextAsFile from './output.js';
 import {CONFIG} from './config';
 import {camera, updateWorldSize} from './initWorld';
 
-export var reader = new (function(){
+export var reader = new (function () {
     this.filename = "none";
 
 })();
@@ -18,121 +17,123 @@ function clamp(num, min, max) {
 var saveString = null;
 var guiControls;
 export var nextHeight = 7;
+let guiHandlers = {};
+
+export let guiCallbacks = [];
+
+
 export function initGui() {
 
-    var guiEnabled = true;
+    if (!CONFIG.GUI) return;
 
-    if (guiEnabled) {
-        // GUI properties
-        guiControls = new (function() {
-            this.camera = camera.position;
-            this.debug = CONFIG.DEBUG;
-            this.blockColor = 0x4286f4;
-            this.newLevel = "";
-            this.gridSize = CONFIG.PLAYGROUND.divisions;
-            this.height = nextHeight;
-            this.constrainBlocks=true;
-            this.remove = false;
-        })();
+    // GUI properties
+    guiControls = new (function () {
+        this.camera = camera.position;
+        this.debug = CONFIG.DEBUG;
+        this.blockColor = 0x4286f4;
+        this.newLevel = "";
+        this.gridSize = CONFIG.PLAYGROUND.divisions;
+        this.height = nextHeight;
+        this.constrainBlocks = true;
+        this.remove = false;
+    })();
 
-        // GUI elements
-        let gui = new dat.GUI();
-        gui.add({saveLevel}, "saveLevel").name("Save Level");
-        gui.add(guiControls, "debug")
+    // GUI elements
+    let gui = new dat.GUI();
+    // gui.add({saveLevel}, "saveLevel").name("Save Level");
+    guiHandlers.debugMode = gui.add(guiControls, "debug")
         .name("Debug Mode")
-        .onChange(v =>
-            {
-                CONFIG.DEBUG = v;
-                if (CONFIG.DEBUG)
-                    sceneDebugElems.forEach(e => scene.add(e));
-                else
-                    sceneDebugElems.forEach(e => scene.remove(e));
-
-            })
         .listen();
-        let cameraControls = gui.addFolder("Camera");
+    let cameraControls = gui.addFolder("Camera");
 
-        cameraControls.add(guiControls.camera, "x").step(0.001).name("Camera X")
+    cameraControls.add(guiControls.camera, "x").step(0.001).name("Camera X")
         .listen();
-        cameraControls.add(guiControls.camera, "y").step(0.001).name("Camera Y").listen();
-        cameraControls.add(guiControls.camera, "z").step(0.001).name("Camera Z").listen();
+    cameraControls.add(guiControls.camera, "y").step(0.001).name("Camera Y").listen();
+    cameraControls.add(guiControls.camera, "z").step(0.001).name("Camera Z").listen();
 
-        let sizeControl = gui.addFolder("Size");
-        sizeControl.add(guiControls, "gridSize", 5, 25)
-            .step(1)
-            .name("Grid Size")
-            .onChange(function(value) {
-                nextDivision = value;
-                if (reader.filename != "none"){
-                    //message this cannot be done in game mode
-                    $('#exampleModalLabel').text("Sorry!");
-                    $('.modal-body').text("You cannot change the map size in game mode. Try changing to level \"none\"");
-                    $('#gameModal').modal('show');
-                    return;
-                }
-                CONFIG.PLAYGROUND.divisions = value;
-                CONFIG.PLAYGROUND.wallHeight = CONFIG.PLAYGROUND.size / CONFIG.PLAYGROUND.divisions * CONFIG.PLAYGROUND.height;
-                deleteBlocks();
-                updateWorldSize();
-            });
+    let sizeControl = gui.addFolder("Size");
+    sizeControl.add(guiControls, "gridSize", 5, 25)
+        .step(1)
+        .name("Grid Size")
+        .onChange(function (value) {
+            nextDivision = value;
+            if (reader.filename != "none") {
+                //message this cannot be done in game mode
+                $('#exampleModalLabel').text("Sorry!");
+                $('.modal-body').text("You cannot change the map size in game mode. Try changing to level \"none\"");
+                $('#gameModal').modal('show');
+                return;
+            }
+            CONFIG.PLAYGROUND.divisions = value;
+            CONFIG.PLAYGROUND.wallHeight = CONFIG.PLAYGROUND.size / CONFIG.PLAYGROUND.divisions * CONFIG.PLAYGROUND.height;
+            deleteBlocks();
+            updateWorldSize();
+        });
 
-        sizeControl.add(guiControls, "height", 4, 20)
-            .step(1)
-            .name("Height")
-            .onChange(function(value) {
-                nextHeight = value;
-                if (reader.filename != "none"){
-                    //message this cannot be done in game mode
-                    $('#exampleModalLabel').text("Sorry!");
-                    $('.modal-body').text("You cannot change the map height in game mode. Try changing to level \"none\"");
-                    $('#gameModal').modal('show');
-                    return;
-                }
-                CONFIG.PLAYGROUND.height = value;
-                CONFIG.PLAYGROUND.wallHeight = CONFIG.PLAYGROUND.size / CONFIG.PLAYGROUND.divisions * CONFIG.PLAYGROUND.height;
-                updateWorldSize();
-            });
+    sizeControl.add(guiControls, "height", 4, 20)
+        .step(1)
+        .name("Height")
+        .onChange(function (value) {
+            nextHeight = value;
+            if (reader.filename != "none") {
+                //message this cannot be done in game mode
+                $('#exampleModalLabel').text("Sorry!");
+                $('.modal-body').text("You cannot change the map height in game mode. Try changing to level \"none\"");
+                $('#gameModal').modal('show');
+                return;
+            }
+            CONFIG.PLAYGROUND.height = value;
+            CONFIG.PLAYGROUND.wallHeight = CONFIG.PLAYGROUND.size / CONFIG.PLAYGROUND.divisions * CONFIG.PLAYGROUND.height;
+            updateWorldSize();
+        });
 
-        let saveState = gui.addFolder("Save Settings");
-        saveState.add({saveWorld}, "saveWorld").name("Save State to File");
-        saveState.add({loadWorld}, "loadWorld").name("Load State to File");
+    let saveState = gui.addFolder("Save Settings");
+    // saveState.add({saveWorld}, "saveWorld").name("Save State to File");
+    // saveState.add({loadWorld}, "loadWorld").name("Load State to File");
 
-        let appearanceControls = gui.addFolder("Creative Tools");
-        appearanceControls.open();
-        appearanceControls.add({textureCube}, "textureCube").name("Texture Cube");
-        appearanceControls.add({normalCube}, "normalCube").name("Normal Cube");
-        appearanceControls.add({colorCube}, "colorCube").name("Color Cube");
+    let appearanceControls = gui.addFolder("Creative Tools");
+    appearanceControls.open();
+    // appearanceControls.add({textureCube}, "textureCube").name("Texture Cube");
+    // appearanceControls.add({normalCube}, "normalCube").name("Normal Cube");
+    // appearanceControls.add({colorCube}, "colorCube").name("Color Cube");
 
-        appearanceControls
+    appearanceControls
         .addColor(guiControls, "blockColor")
         .name("Block Color")
-        .onChange(function(value) {
+        .onChange(function (value) {
             console.log(value);
             blockColor = new THREE.Color(value);
         });
 
-        let gameSettings = gui.addFolder("Game Settings");
-        gameSettings.open();
-        gameSettings.add(reader, 'filename', [ 'none', 'line', '2-3', '2-5', 'tensorflow', 'CHALLENGE', 'House-Duck', 'Heart-Diamond','bighouse','thankyou'] ).name("CHOOSE LEVEL").
-        onChange(v => {
-            reader.filename = v;
-            setLevel(v + ".txt")
-        }).listen();
+    let gameSettings = gui.addFolder("Game Settings");
+    gameSettings.open();
+    let chooseLevel = gameSettings.add(reader, 'filename',
+        ['none', 'line', '2-3', '2-5', 'tensorflow', 'CHALLENGE',
+            'House-Duck', 'Heart-Diamond', 'bighouse', 'thankyou'])
+        .name("CHOOSE LEVEL")
+        .listen();
 
-        gameSettings.add(guiControls, "constrainBlocks")
+    guiHandlers.chooseLevel = chooseLevel;
+
+
+    gameSettings.add(guiControls, "constrainBlocks")
         .name("Limit to Grid")
-        .onChange(function(value) {
+        .onChange(function (value) {
             constrain = value;
         });
 
-        gui.add(guiControls, "remove")
+    gui.add(guiControls, "remove")
         .name("Remove Blocks")
-        .onChange(function(value) {
+        .onChange(function (value) {
             del_cube = value;
         });
-    }
+
+    // pass the gui Controllers to all registered onChange callbacks
+    guiCallbacks.map(f => f(guiHandlers));
 }
 
+
+/*
 function saveLevel() {
     var walls = new Array(2);
     for (var r = 0; r<2; r++){
@@ -289,3 +290,4 @@ function loadWorld(){
         borders.push(wireframe);
     }
 }
+*/

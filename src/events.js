@@ -1,14 +1,14 @@
 "use strict";
 
-export var mouse = new THREE.Vector2(200000,2000000)
+export var mouse = new THREE.Vector2(200000, 2000000)
 var INTERSECTED;
 export var del_cube = false;
-export var click = {clicked:false};
+export var click = {clicked: false};
 var potentialClick = false;
-export var clickMouse = new THREE.Vector2(200000,2000000);
+export var clickMouse = new THREE.Vector2(200000, 2000000);
 
 export function initEventHandlers() {
-    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+    document.addEventListener('mousemove', onDocumentMouseMove, false);
     window.addEventListener("resize", onWindowResize, false);
 
     window.addEventListener("mousedown", onDocumentMouseDown, false);
@@ -21,23 +21,23 @@ export function initEventHandlers() {
 }
 
 // event handlers
-function onDocumentMouseMove( event ) {
+function onDocumentMouseMove(event) {
     //event.preventDefault();
-    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     // if mouse moved, do not put register a click
-    if ( potentialClick && clickMouse.distanceTo(mouse) > 0.00001)
+    if (potentialClick && clickMouse.distanceTo(mouse) > 0.00001)
         potentialClick = false;
 }
 
-function onDocumentMouseDown( event ) {
+function onDocumentMouseDown(event) {
     //event.preventDefault();
-    clickMouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    clickMouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    clickMouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    clickMouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     potentialClick = true;
 }
 
-function onDocumentMouseUp( event ) {
+function onDocumentMouseUp(event) {
     //event.preventDefault();
     if (potentialClick) click.clicked = true;
 }
@@ -48,10 +48,10 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function onKeyDown (event) {
-    if(event.key == 'd') del_cube = true;
+function onKeyDown(event) {
+    if (event.key == 'd') del_cube = true;
 }
 
-function onKeyUp (event) {
-    if(event.key == 'd') del_cube = false;
+function onKeyUp(event) {
+    if (event.key == 'd') del_cube = false;
 }
